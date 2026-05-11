@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operational Learning — EHSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2563EB;
+      --blue-light: #DBEAFE;
+      --green: #059669;
+      --green-light: #D1FAE5;
+      --orange: #D97706;
+      --orange-light: #FEF3C7;
+      --red: #DC2626;
+      --red-light: #FEE2E2;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-400: #94A3B8;
+      --gray-600: #475569;
+      --gray-900: #0F172A;
+      --purple: #7C3AED;
+      --purple-dark: #4C1D95;
+      --purple-lite: #EDE9FE;
+      --purple-xl: #F5F3FF;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.07);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--purple-xl);
+      color: var(--gray-900);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      background: linear-gradient(135deg, #1E0A45 0%, #4C1D95 45%, #6D28D9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      box-shadow: 0 2px 16px rgba(76,29,149,0.4), 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    nav .logo span {
+      font-weight: 500;
+      opacity: 0.82;
+      margin-left: 6px;
+      font-size: 14px;
+    }
+
+    nav .user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.9);
+      font-size: 13px;
+    }
+
+    nav .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    /* SHELL */
+    .shell {
+      display: flex;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* SIDEBAR */
+    aside {
+      width: 230px;
+      background: #fff;
+      border-right: 1px solid var(--gray-200);
+      padding: 16px 0 24px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+
+    aside .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: var(--gray-400);
+      padding: 16px 20px 6px;
+    }
+
+    aside a {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px 9px 17px;
+      color: var(--gray-600);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      user-select: none;
+    }
+
+    aside a:hover {
+      background: var(--purple-xl);
+      color: var(--gray-900);
+    }
+
+    aside a.active {
+      background: var(--purple-lite);
+      border-left-color: var(--purple);
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    aside a .icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    aside .badge {
+      margin-left: auto;
+      background: var(--purple);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      min-width: 20px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      padding: 32px 36px;
+      min-width: 0;
+    }
+
+    /* PAGES */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--gray-900);
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 28px;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-top: 3px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 20px 18px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+
+    .stat-card.red  { border-top-color: var(--red); }
+    .stat-card.orange { border-top-color: var(--orange); }
+    .stat-card.green  { border-top-color: var(--green); }
+
+    .stat-card .label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--gray-900);
+      letter-spacing: -1.5px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .delta {
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .stat-card .delta.down { color: var(--red); }
+
+    /* TWO-COL */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* CARDS */
+    .card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .card-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: -0.2px;
+    }
+
+    .card-body {
+      padding: 18px 20px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--purple);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.32);
+    }
+    .btn-primary:hover { background: #6d28d9; box-shadow: 0 4px 14px rgba(124,58,237,0.4); }
+
+    .btn-success {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(5,150,105,0.28);
+    }
+    .btn-success:hover { background: #047857; }
+
+    .btn-danger {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(220,38,38,0.28);
+    }
+    .btn-danger:hover { background: #b91c1c; }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--gray-600);
+      border: 1.5px solid var(--gray-200);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); color: var(--gray-900); }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+
+    /* INCIDENT LIST */
+    .incident-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .incident-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 13px 8px;
+      margin: 0 -8px;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.1s;
+    }
+
+    .incident-item:last-child { border-bottom: none; }
+    .incident-item:hover { background: var(--purple-xl); }
+
+    .severity-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .severity-dot.high   { background: var(--red);    box-shadow: 0 0 0 3px rgba(220,38,38,0.15); }
+    .severity-dot.medium { background: var(--orange);  box-shadow: 0 0 0 3px rgba(217,119,6,0.15); }
+    .severity-dot.low    { background: var(--green);   box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
+
+    .incident-info { flex: 1; min-width: 0; }
+
+    .incident-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 3px;
+    }
+
+    .incident-meta {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-bottom: 6px;
+    }
+
+    .incident-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    /* TAGS */
+    .tag {
+      display: inline-block;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .tag.blue {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: transparent;
+    }
+
+    /* STATUS BADGES */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .status.pending   { background: var(--orange-light); color: var(--orange); }
+    .status.approved  { background: var(--green-light);  color: var(--green);  }
+    .status.review    { background: var(--blue-light);   color: var(--blue);   }
+    .status.completed { background: var(--green-light);  color: var(--green);  }
+
+    /* INSIGHTS */
+    .insight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .insight-item {
+      padding: 14px 16px;
+      border-radius: 8px;
+      border-left: 4px solid var(--purple);
+      background: var(--purple-xl);
+      margin-bottom: 12px;
+    }
+
+    .insight-item:last-child { margin-bottom: 0; }
+
+    .insight-item.risk {
+      background: var(--red-light);
+      border-left-color: var(--red);
+    }
+
+    .insight-item.warn {
+      background: var(--orange-light);
+      border-left-color: var(--orange);
+    }
+
+    .insight-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--purple);
+      margin-bottom: 6px;
+    }
+
+    .insight-item.risk .insight-label { color: var(--red); }
+    .insight-item.warn .insight-label { color: var(--orange); }
+
+    .insight-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--gray-900);
+    }
+
+    .insight-cta { margin-top: 10px; }
+
+    /* TRAINING / ACTION LIST */
+    .training-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .training-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .training-item:last-child { border-bottom: none; }
+
+    .training-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .training-info { flex: 1; min-width: 0; }
+
+    .training-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 2px;
+    }
+
+    .training-meta {
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    /* PROGRESS */
+    .progress-bar-wrap {
+      background: var(--gray-100);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--purple);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    /* FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-600);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--gray-900);
+      background: #fff;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+    }
+
+    .form-group textarea {
+      min-height: 96px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* BODY MAP */
+    .body-map-wrap {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .body-map {
+      width: 130px;
+      flex-shrink: 0;
+    }
+
+    .body-map svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .body-part {
+      fill: #DDD6FE;
+      stroke: #8B5CF6;
+      stroke-width: 1.5;
+      cursor: pointer;
+      transition: fill 0.12s, stroke 0.12s;
+    }
+
+    .body-part:hover  { fill: #c4b5fd; }
+    .body-part.selected { fill: #fca5a5; stroke: #DC2626; }
+
+    .body-legend { flex: 1; }
+
+    .body-legend h4 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-600);
+      margin-bottom: 10px;
+    }
+
+    .selected-parts {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .selected-part-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--red);
+    }
+
+    .selected-part-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+
+    /* SITE MAP */
+    .site-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .site-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .site-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 2px;
+    }
+
+    .site-geo {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-bottom: 12px;
+    }
+
+    .site-metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--gray-600);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .site-metric:last-child { border-bottom: none; }
+
+    .mval {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--gray-900);
+    }
+
+    .mval.risk { color: var(--red); }
+    .mval.ok   { color: var(--green); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1);
+      width: 560px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    .modal h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+      padding-right: 32px;
+    }
+
+    .modal-sub {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s;
+    }
+
+    .close-btn:hover { background: var(--gray-200); color: var(--gray-900); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0F172A;
+      color: #fff;
+      padding: 12px 20px 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+      z-index: 300;
+    }
+
+    .toast::before {
+      content: '✓  ';
+      color: #10b981;
+      font-weight: 800;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       DARK THEME OVERRIDE — Tokyo Night / IDE aesthetic (matches deck)
+       ════════════════════════════════════════════════════════════════════ */
+    :root {
+      --bg-deep:    #0a0e1a;
+      --bg-mid:     #13182a;
+      --bg-card:    #161c30;
+      --ink:        #c0caf5;
+      --ink-dim:    #9aa5ce;
+      --ink-mute:   #6b7394;
+      --acc-blue:   #7aa2f7;
+      --acc-cyan:   #7dcfff;
+      --acc-mint:   #9ece6a;
+      --acc-purple: #bb9af7;
+      --acc-rose:   #f7768e;
+      --acc-amber:  #e0af68;
+      --acc-orange: #ff9e64;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.35);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 1px 1px, rgba(192,202,245,0.04) 1px, transparent 0),
+        var(--bg-deep);
+      background-size: 22px 22px, auto;
+      color: var(--ink);
+    }
+
+    /* NAV */
+    nav {
+      background: linear-gradient(180deg, #0d1320 0%, #0a0e1a 100%) !important;
+      border-bottom: 1px solid rgba(122,162,247,0.12);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
+    }
+
+    nav .logo { font-family: var(--mono); font-weight: 600; font-size: 13px; }
+    nav .logo::before { content: '~/ '; color: var(--acc-cyan); opacity: 0.7; }
+    nav .logo span { color: var(--ink-dim); }
+    nav .user { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); }
+    nav .avatar {
+      background: color-mix(in srgb, var(--acc-blue) 18%, transparent);
+      border-color: color-mix(in srgb, var(--acc-blue) 40%, transparent);
+      color: var(--acc-blue);
+      font-family: var(--mono);
+    }
+
+    /* SIDEBAR */
+    aside {
+      background: var(--bg-mid);
+      border-right: 1px solid rgba(122,162,247,0.10);
+    }
+
+    aside .section-label {
+      font-family: var(--mono);
+      color: var(--ink-mute);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    aside .section-label::before { content: '// '; color: var(--acc-blue); opacity: 0.5; }
+
+    aside a {
+      color: var(--ink-dim);
+      font-family: var(--mono);
+      font-size: 12px;
+      border-left-color: transparent;
+    }
+    aside a:hover { background: rgba(122,162,247,0.06); color: var(--ink); }
+    aside a.active {
+      background: color-mix(in srgb, var(--acc-blue) 10%, transparent);
+      border-left-color: var(--acc-blue);
+      color: var(--acc-blue);
+    }
+    aside .badge {
+      background: color-mix(in srgb, var(--acc-blue) 16%, transparent);
+      border: 1px solid color-mix(in srgb, var(--acc-blue) 38%, transparent);
+      color: var(--acc-blue);
+      font-family: var(--mono);
+      font-size: 9px;
+    }
+
+    /* MAIN */
+    main { color: var(--ink); }
+
+    h1 { color: var(--ink); }
+    .subtitle { color: var(--ink-dim); font-family: var(--mono); font-size: 12px; }
+
+    /* STATS */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-top: 2px solid rgba(122,162,247,0.40);
+      box-shadow: var(--shadow);
+    }
+    .stat-card:hover { box-shadow: 0 6px 28px rgba(122,162,247,0.10); }
+    .stat-card.red    { border-top-color: var(--acc-rose); }
+    .stat-card.orange { border-top-color: var(--acc-amber); }
+    .stat-card.green  { border-top-color: var(--acc-mint); }
+
+    .stat-card .label {
+      color: var(--ink-mute);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+    .stat-card .label::before { content: '// '; color: var(--acc-blue); opacity: 0.5; }
+
+    .stat-card .value {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-weight: 600;
+    }
+    .stat-card.red .value    { color: var(--acc-rose); }
+    .stat-card.orange .value { color: var(--acc-amber); }
+    .stat-card.green .value  { color: var(--acc-mint); }
+
+    .stat-card .delta { color: var(--ink-mute); font-family: var(--mono); font-size: 11px; }
+    .stat-card .delta.down { color: var(--acc-rose); }
+
+    /* CARDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(122,162,247,0.15);
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      border-bottom: 1px solid rgba(122,162,247,0.10);
+    }
+    .card-header h2 { color: var(--ink); font-size: 13px; }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: color-mix(in srgb, var(--acc-blue) 18%, transparent) !important;
+      color: var(--acc-blue) !important;
+      border: 1px solid color-mix(in srgb, var(--acc-blue) 45%, transparent) !important;
+      box-shadow: none !important;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .btn-primary:hover {
+      background: color-mix(in srgb, var(--acc-blue) 30%, transparent) !important;
+      border-color: var(--acc-blue) !important;
+    }
+    .btn-success {
+      background: color-mix(in srgb, var(--acc-mint) 16%, transparent) !important;
+      color: var(--acc-mint) !important;
+      border: 1px solid color-mix(in srgb, var(--acc-mint) 40%, transparent) !important;
+      box-shadow: none !important;
+      font-family: var(--mono);
+    }
+    .btn-success:hover { background: color-mix(in srgb, var(--acc-mint) 28%, transparent) !important; }
+    .btn-danger {
+      background: color-mix(in srgb, var(--acc-rose) 14%, transparent) !important;
+      color: var(--acc-rose) !important;
+      border: 1px solid color-mix(in srgb, var(--acc-rose) 38%, transparent) !important;
+      box-shadow: none !important;
+      font-family: var(--mono);
+    }
+    .btn-danger:hover { background: color-mix(in srgb, var(--acc-rose) 26%, transparent) !important; }
+    .btn-outline {
+      background: rgba(122,162,247,0.05) !important;
+      border: 1px solid rgba(122,162,247,0.22) !important;
+      color: var(--ink-dim) !important;
+      box-shadow: none !important;
+      font-family: var(--mono);
+    }
+    .btn-outline:hover {
+      background: rgba(122,162,247,0.12) !important;
+      border-color: var(--acc-blue) !important;
+      color: var(--acc-blue) !important;
+    }
+
+    /* INCIDENT LIST */
+    .incident-item {
+      border-bottom-color: rgba(122,162,247,0.10);
+    }
+    .incident-item:hover { background: rgba(122,162,247,0.06); }
+    .incident-title { color: var(--ink); }
+    .incident-meta  { color: var(--ink-mute); font-family: var(--mono); font-size: 11px; }
+    .severity-dot.high   { background: var(--acc-rose);  box-shadow: 0 0 0 3px rgba(247,118,142,0.18); }
+    .severity-dot.medium { background: var(--acc-amber); box-shadow: 0 0 0 3px rgba(224,175,104,0.18); }
+    .severity-dot.low    { background: var(--acc-mint);  box-shadow: 0 0 0 3px rgba(158,206,106,0.18); }
+
+    /* TAGS */
+    .tag {
+      background: rgba(122,162,247,0.06);
+      border: 1px solid rgba(122,162,247,0.22);
+      color: var(--ink-dim);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+    .tag.blue {
+      background: color-mix(in srgb, var(--acc-cyan) 12%, transparent);
+      color: var(--acc-cyan);
+      border-color: color-mix(in srgb, var(--acc-cyan) 30%, transparent);
+    }
+
+    /* STATUS */
+    .status { font-family: var(--mono); font-weight: 500; font-size: 10px; }
+    .status.pending   { background: color-mix(in srgb, var(--acc-amber) 14%, transparent); color: var(--acc-amber); }
+    .status.approved  { background: color-mix(in srgb, var(--acc-mint) 14%, transparent);  color: var(--acc-mint);  }
+    .status.review    { background: color-mix(in srgb, var(--acc-cyan) 14%, transparent);  color: var(--acc-cyan);  }
+    .status.completed { background: color-mix(in srgb, var(--acc-mint) 14%, transparent);  color: var(--acc-mint);  }
+
+    /* INSIGHTS */
+    .insight-item {
+      background: rgba(122,162,247,0.05);
+      border-left-color: var(--acc-blue);
+    }
+    .insight-item.risk {
+      background: color-mix(in srgb, var(--acc-rose) 8%, transparent);
+      border-left-color: var(--acc-rose);
+    }
+    .insight-item.warn {
+      background: color-mix(in srgb, var(--acc-amber) 8%, transparent);
+      border-left-color: var(--acc-amber);
+    }
+    .insight-label {
+      color: var(--acc-blue);
+      font-family: var(--mono);
+      letter-spacing: 0.4px;
+    }
+    .insight-item.risk .insight-label { color: var(--acc-rose); }
+    .insight-item.warn .insight-label { color: var(--acc-amber); }
+    .insight-text { color: var(--ink); }
+    .insight-text strong { color: var(--ink); }
+
+    /* TRAINING / ACTIONS */
+    .training-item { border-bottom-color: rgba(122,162,247,0.10); }
+    .training-icon { background: rgba(122,162,247,0.10); }
+    .training-title { color: var(--ink); }
+
+    /* BODY MAP */
+    .body-part { transition: fill 0.15s, stroke 0.15s; }
+    .body-part {
+      fill: rgba(122,162,247,0.10);
+      stroke: rgba(122,162,247,0.30);
+      stroke-width: 1;
+      cursor: pointer;
+    }
+    .body-part:hover { fill: rgba(122,162,247,0.25); stroke: var(--acc-blue); }
+    .body-part.selected { fill: var(--acc-rose); stroke: #fff; stroke-width: 1.5; }
+
+    /* FORMS / inputs (generic) */
+    input, select, textarea {
+      background: var(--bg-deep) !important;
+      color: var(--ink) !important;
+      border: 1px solid rgba(122,162,247,0.22) !important;
+      font-family: 'Inter', sans-serif;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--acc-blue) !important;
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--acc-blue) 25%, transparent);
+    }
+    label { color: var(--ink-dim); }
+
+    /* MODALS / TOASTS */
+    .toast {
+      background: var(--bg-card) !important;
+      border: 1px solid var(--acc-mint) !important;
+      color: var(--ink) !important;
+      font-family: var(--mono);
+      font-size: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       AI STITCH WALKTHROUGH — interactive prototype
+       ════════════════════════════════════════════════════════════════════ */
+    .wt-wrap {
+      max-width: 1100px;
+    }
+
+    .wt-progress {
+      display: flex;
+      gap: 6px;
+      margin: 18px 0 24px;
+    }
+
+    .wt-step-pill {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .wt-step-pill .wt-step-n {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink-mute);
+      letter-spacing: 0.5px;
+    }
+
+    .wt-step-pill .wt-step-t {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-dim);
+    }
+
+    .wt-step-pill.active {
+      background: color-mix(in srgb, var(--acc-blue) 14%, transparent);
+      border-color: var(--acc-blue);
+      box-shadow: 0 0 0 1px var(--acc-blue), 0 0 16px rgba(122,162,247,0.25);
+    }
+    .wt-step-pill.active .wt-step-n { color: var(--acc-blue); }
+    .wt-step-pill.active .wt-step-t { color: var(--ink); }
+    .wt-step-pill.done {
+      background: color-mix(in srgb, var(--acc-mint) 8%, transparent);
+      border-color: color-mix(in srgb, var(--acc-mint) 30%, transparent);
+    }
+    .wt-step-pill.done .wt-step-n { color: var(--acc-mint); }
+    .wt-step-pill.done .wt-step-n::after { content: ' ✓'; }
+
+    .wt-stage {
+      background: var(--bg-card);
+      border: 1px solid rgba(122,162,247,0.18);
+      border-radius: 12px;
+      padding: 24px 28px;
+      min-height: 340px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wt-stage::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--acc-rose), var(--acc-amber), var(--acc-cyan));
+    }
+
+    .wt-screen { display: none; animation: wtFade 0.4s ease; }
+    .wt-screen.active { display: block; }
+
+    @keyframes wtFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .wt-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--acc-blue);
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
+    }
+    .wt-eyebrow::before { content: '// '; opacity: 0.6; }
+
+    .wt-screen h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .wt-body p {
+      color: var(--ink-dim);
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .wt-body strong { color: var(--ink); }
+
+    .wt-bullets {
+      list-style: none;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wt-bullets li {
+      font-size: 13px;
+      color: var(--ink-dim);
+      padding-left: 22px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .wt-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 4px;
+      color: var(--acc-blue);
+      top: 0;
+    }
+
+    .wt-cta {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    /* Mini body map for walkthrough step 1 */
+    .wt-bodymap {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin: 16px 0;
+    }
+    .wt-bodymap svg { flex-shrink: 0; }
+    .wt-bodymap .wt-bm-info {
+      flex: 1;
+      padding: 16px 20px;
+      background: rgba(247,118,142,0.08);
+      border: 1px solid rgba(247,118,142,0.30);
+      border-radius: 8px;
+    }
+    .wt-bm-info .lbl {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--acc-rose);
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+    .wt-bm-info .val {
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .wt-bm-info .sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-mute);
+      line-height: 1.5;
+    }
+
+    /* Console / streaming output */
+    .wt-console {
+      background: var(--bg-deep);
+      border: 1px solid rgba(122,162,247,0.20);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-dim);
+      min-height: 130px;
+      margin: 14px 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .wt-console::before {
+      content: '~/wit-2026 · stitch-agent.py — running';
+      display: block;
+      font-size: 10px;
+      color: var(--ink-mute);
+      letter-spacing: 0.3px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed rgba(122,162,247,0.15);
+    }
+    .wt-console .ai-prompt { color: var(--acc-cyan); }
+    .wt-console .ai-key { color: var(--acc-amber); }
+    .wt-console .ai-val { color: var(--ink); }
+    .wt-console .ai-hi  { color: var(--acc-rose); font-weight: 600; }
+    .wt-console .ai-ok  { color: var(--acc-mint); }
+    .wt-console .ai-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      background: var(--acc-blue);
+      vertical-align: -2px;
+      margin-left: 1px;
+      animation: blink 1s steps(2) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Pattern card (step 3 reveal) */
+    .wt-pattern {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .wt-pat-card {
+      background: rgba(247,118,142,0.06);
+      border: 1px solid rgba(247,118,142,0.25);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .wt-pat-card .lbl {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--acc-rose);
+      letter-spacing: 0.4px;
+      margin-bottom: 5px;
+    }
+    .wt-pat-card .val {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .wt-pat-card .sub {
+      font-size: 11px;
+      color: var(--ink-dim);
+      margin-top: 4px;
+    }
+
+    /* Summary doc (step 4) */
+    .wt-summary {
+      background: var(--bg-deep);
+      border: 1px solid rgba(122,162,247,0.18);
+      border-left: 3px solid var(--acc-amber);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 22px;
+      margin: 14px 0;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .wt-summary h4 {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--acc-amber);
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+    .wt-summary h4::before { content: '// '; opacity: 0.6; }
+    .wt-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--ink-dim);
+      margin-bottom: 8px;
+    }
+    .wt-summary p strong { color: var(--ink); }
+
+    /* Action cards (step 5) */
+    .wt-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .wt-act-card {
+      background: color-mix(in srgb, var(--acc-mint) 6%, transparent);
+      border: 1px solid color-mix(in srgb, var(--acc-mint) 28%, transparent);
+      border-radius: 8px;
+      padding: 14px 16px;
+      position: relative;
+    }
+    .wt-act-card::before {
+      content: '✓';
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 20px; height: 20px;
+      background: var(--acc-mint);
+      color: var(--bg-deep);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .wt-act-card .lbl {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--acc-mint);
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+    .wt-act-card .val {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+      margin-bottom: 4px;
+      padding-right: 22px;
+    }
+    .wt-act-card .sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink-mute);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 720px) {
+      .wt-pattern, .wt-actions { grid-template-columns: 1fr; }
+      .wt-bodymap { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav>
+  <div class="logo">EHSS <span>Operational Learning</span></div>
+  <div class="user">
+    <div class="avatar">MJ</div>
+    <span>Maria Johnson</span>
+    <span style="opacity:0.5">·</span>
+    <span style="opacity:0.7; font-size:12px;">Safety Manager · Detroit</span>
+  </div>
+</nav>
+
+<!-- SHELL -->
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="section-label">Overview</div>
+    <a class="active" onclick="navigate('dashboard')"><span class="icon">🏠</span> Dashboard</a>
+    <a onclick="navigate('walkthrough')"><span class="icon">🧵</span> AI Stitch Demo <span class="badge">live</span></a>
+    <a onclick="navigate('insights')"><span class="icon">🤖</span> AI Insights <span class="badge">3</span></a>
+
+    <div class="section-label">Incidents</div>
+    <a onclick="navigate('incidents')"><span class="icon">⚠️</span> Incident Feed <span class="badge">2</span></a>
+    <a onclick="navigate('report')"><span class="icon">➕</span> Report Incident</a>
+
+    <div class="section-label">Learning</div>
+    <a onclick="navigate('learningteams')"><span class="icon">🔍</span> Learning Teams <span class="badge">1</span></a>
+    <a onclick="navigate('actions')"><span class="icon">✅</span> Actions <span class="badge">3</span></a>
+
+    <div class="section-label">Global</div>
+    <a onclick="navigate('sites')"><span class="icon">🌐</span> Site Map</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <h1>Good morning, Maria 👋</h1>
+      <p class="subtitle">Detroit Assembly Plant · Week of March 23, 2026</p>
+
+      <div class="stats">
+        <div class="stat-card red">
+          <div class="label">Open Incidents</div>
+          <div class="value">7</div>
+          <div class="delta down">↑ 2 vs last week</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="label">Pending Review</div>
+          <div class="value">2</div>
+          <div class="delta">Awaiting approval</div>
+        </div>
+        <div class="stat-card green">
+          <div class="label">Learning Teams</div>
+          <div class="value">2</div>
+          <div class="delta">1 in progress · 1 complete</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Open Actions</div>
+          <div class="value">3</div>
+          <div class="delta">2 high priority</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h2>Recent Incidents</h2>
+              <button class="btn btn-outline btn-sm" onclick="navigate('incidents')">View All</button>
+            </div>
+            <div class="card-body">
+              <div class="incident-list" id="dashboard-incidents"></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h2>Flagged Pattern</h2>
+            </div>
+            <div class="card-body">
+              <div class="insight-item risk">
+                <div class="insight-label">High Risk</div>
+                <div class="insight-text"><strong>Wrist strain — Line 4, Station 4C.</strong> 3 incidents in 30 days. Early AM shift, operators new within 90 days. LT-001 convened.</div>
+                <div class="insight-cta">
+                  <button class="btn btn-danger btn-sm" onclick="navigate('insights')">View Full Analysis</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:0">
+            <div class="card-header">
+              <h2>Open Actions</h2>
+              <button class="btn btn-outline btn-sm" onclick="navigate('actions')">View All</button>
+            </div>
+            <div class="card-body">
+              <div class="training-list">
+                <div class="training-item">
+                  <div class="training-icon" style="background:var(--red-light);">🔧</div>
+                  <div class="training-info">
+                    <div class="training-title">Adjustable-height tool mount — Station 4C</div>
+                    <div class="training-meta">From LT-001 · High Priority · Ergonomics Eng.</div>
+                  </div>
+                  <span class="status pending">Open</span>
+                </div>
+                <div class="training-item">
+                  <div class="training-icon" style="background:var(--red-light);">⚡</div>
+                  <div class="training-info">
+                    <div class="training-title">Replace hydraulic fittings >2yr — Paint</div>
+                    <div class="training-meta">From LT-002 · High Priority · Maintenance</div>
+                  </div>
+                  <span class="status review">In Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INCIDENTS -->
+    <div class="page" id="page-incidents">
+      <h1>Incident Feed</h1>
+      <p class="subtitle">Production floor incidents submitted for Operational Learning review</p>
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="openReportModal()">➕ Report Incident</button>
+        <select style="padding:8px 12px; font-size:13px; border-radius:6px; border:1.5px solid var(--gray-200);">
+          <option>All Severity</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+        <select style="padding:8px 12px; font-size:13px; border-radius:6px; border:1.5px solid var(--gray-200);">
+          <option>All Status</option>
+          <option>Pending Review</option>
+          <option>Approved</option>
+        </select>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="incident-list" id="incidents-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT -->
+    <div class="page" id="page-report">
+      <h1>Report an Incident</h1>
+      <p class="subtitle">Your report will be reviewed and may trigger a Learning Team investigation — thank you for helping us build safer systems</p>
+      <div class="card">
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Incident Date & Time</label>
+              <input type="datetime-local" value="2026-03-29T08:30" />
+            </div>
+            <div class="form-group">
+              <label>Production Line / Area</label>
+              <select>
+                <option>Line 4 — Assembly</option>
+                <option>Line 2 — Welding</option>
+                <option>Line 7 — Paint</option>
+                <option>Warehouse — Receiving</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Incident Type</label>
+              <select>
+                <option>Strain / Ergonomic</option>
+                <option>Laceration</option>
+                <option>Eye Injury</option>
+                <option>Fall / Trip</option>
+                <option>Chemical Exposure</option>
+                <option>Near Miss</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Severity</label>
+              <select>
+                <option>Low — Near Miss</option>
+                <option>Medium — First Aid</option>
+                <option>High — Medical Treatment</option>
+                <option>Critical — Lost Time</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>What happened? (in your own words)</label>
+              <textarea placeholder="Describe what you experienced or witnessed. Include what you were doing, what went wrong, and any contributing factors..."></textarea>
+            </div>
+            <div class="form-group full">
+              <label>What could have prevented this?</label>
+              <textarea placeholder="Your perspective as someone who was there is valuable. What would you tell a coworker to watch out for?"></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Affected Body Area (tap to select)</label>
+              <div class="body-map-wrap">
+                <div class="body-map">
+                  <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse class="body-part" id="bp-head" cx="50" cy="20" rx="16" ry="18" onclick="toggleBodyPart('head','Head')" />
+                    <rect class="body-part" id="bp-neck" x="43" y="36" width="14" height="10" rx="3" onclick="toggleBodyPart('neck','Neck')" />
+                    <ellipse class="body-part" id="bp-lshoulder" cx="25" cy="52" rx="12" ry="8" onclick="toggleBodyPart('lshoulder','Left Shoulder')" />
+                    <ellipse class="body-part" id="bp-rshoulder" cx="75" cy="52" rx="12" ry="8" onclick="toggleBodyPart('rshoulder','Right Shoulder')" />
+                    <rect class="body-part" id="bp-torso" x="33" y="46" width="34" height="50" rx="5" onclick="toggleBodyPart('torso','Torso')" />
+                    <rect class="body-part" id="bp-luarm" x="14" y="60" width="12" height="28" rx="4" onclick="toggleBodyPart('luarm','Left Upper Arm')" />
+                    <rect class="body-part" id="bp-ruarm" x="74" y="60" width="12" height="28" rx="4" onclick="toggleBodyPart('ruarm','Right Upper Arm')" />
+                    <rect class="body-part" id="bp-llarm" x="12" y="90" width="10" height="26" rx="4" onclick="toggleBodyPart('llarm','Left Forearm')" />
+                    <rect class="body-part" id="bp-rlarm" x="78" y="90" width="10" height="26" rx="4" onclick="toggleBodyPart('rlarm','Right Forearm')" />
+                    <ellipse class="body-part" id="bp-lhand" cx="17" cy="122" rx="8" ry="6" onclick="toggleBodyPart('lhand','Left Wrist / Hand')" />
+                    <ellipse class="body-part" id="bp-rhand" cx="83" cy="122" rx="8" ry="6" onclick="toggleBodyPart('rhand','Right Wrist / Hand')" />
+                    <rect class="body-part" id="bp-lthigh" x="34" y="98" width="14" height="36" rx="4" onclick="toggleBodyPart('lthigh','Left Thigh')" />
+                    <rect class="body-part" id="bp-rthigh" x="52" y="98" width="14" height="36" rx="4" onclick="toggleBodyPart('rthigh','Right Thigh')" />
+                    <ellipse class="body-part" id="bp-lknee" cx="41" cy="137" rx="8" ry="6" onclick="toggleBodyPart('lknee','Left Knee')" />
+                    <ellipse class="body-part" id="bp-rknee" cx="59" cy="137" rx="8" ry="6" onclick="toggleBodyPart('rknee','Right Knee')" />
+                    <rect class="body-part" id="bp-lshin" x="34" y="143" width="13" height="32" rx="4" onclick="toggleBodyPart('lshin','Left Shin / Calf')" />
+                    <rect class="body-part" id="bp-rshin" x="53" y="143" width="13" height="32" rx="4" onclick="toggleBodyPart('rshin','Right Shin / Calf')" />
+                    <ellipse class="body-part" id="bp-lfoot" cx="39" cy="179" rx="10" ry="6" onclick="toggleBodyPart('lfoot','Left Foot')" />
+                    <ellipse class="body-part" id="bp-rfoot" cx="61" cy="179" rx="10" ry="6" onclick="toggleBodyPart('rfoot','Right Foot')" />
+                  </svg>
+                </div>
+                <div class="body-legend">
+                  <h4>Selected Areas</h4>
+                  <div class="selected-parts" id="selected-parts">
+                    <div style="color:var(--gray-400); font-size:13px; font-style:italic;">Tap a body area to select it</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group full" style="text-align:right; margin-top:8px;">
+              <button class="btn btn-primary" onclick="submitIncident()">Submit Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEARNING TEAMS -->
+    <div class="page" id="page-learningteams">
+      <h1>Learning Teams</h1>
+      <p class="subtitle">Cross-functional investigations focused on system causes, not individual blame</p>
+
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="showToast('Learning Team request submitted for Safety Manager review')">➕ Request Learning Team</button>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header">
+          <h2>🔍 LT-001 — Wrist Injury Pattern · Line 4</h2>
+          <span class="status review">In Progress</span>
+        </div>
+        <div class="card-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-600);margin-bottom:6px;">Triggered By</div>
+              <div style="font-size:13px;">AI pattern: 3 wrist injuries, same station, 30 days</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-600);margin-bottom:6px;">Participants</div>
+              <div style="font-size:13px;">Tony R. · Maria J. · Line 4 Supervisor · Ergonomics Eng.</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-600);margin-bottom:6px;">Session 1</div>
+              <div style="font-size:13px;">Mar 26, 2026 — Completed</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-600);margin-bottom:6px;">Session 2</div>
+              <div style="font-size:13px;">Mar 31, 2026 — Scheduled</div>
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Draft Summary</div>
+            <div class="insight-text">Station 4C, shift changeover. Contributing factors: tool mount height not adjusted between shifts; no handoff position protocol; early-shift operators new within 90 days. <strong>Root cause: system design, not worker error.</strong></div>
+          </div>
+          <div style="margin-top:12px; padding:12px; background:var(--green-light); border-radius:8px; font-size:13px;">
+            <strong style="color:var(--green);">Suggested Actions</strong>
+            <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+              <div>① Install adjustable-height tool mount at Station 4C to accommodate ergonomic variation between shifts</div>
+              <div>② Define and post standard handoff position protocol at the station boundary</div>
+            </div>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="showToast('Summary saved as draft')">Save Draft</button>
+            <button class="btn btn-success btn-sm" onclick="showToast('Summary submitted for management sign-off')">Submit for Sign-Off</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>✓ LT-002 — Hydraulic Spill Near-Miss · Paint Line</h2>
+          <span class="status completed">Complete</span>
+        </div>
+        <div class="card-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-600);margin-bottom:6px;">Completed</div>
+              <div style="font-size:13px;">Mar 20, 2026</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-600);margin-bottom:6px;">Participants</div>
+              <div style="font-size:13px;">Marcus T. · Maria J. · Maintenance Lead · Paint Sup.</div>
+            </div>
+          </div>
+          <div class="insight-item" style="background:var(--green-light); border-left-color:var(--green); margin-bottom:12px;">
+            <div class="insight-label" style="color:var(--green);">Signed-Off Summary</div>
+            <div class="insight-text">Contributing factors: paint arm hydraulic fitting age exceeded 3 years with no proactive replacement interval in the PM schedule. System had no safeguard for hydraulic wear over time. <strong>Root cause: maintenance schedule gap, not worker failure.</strong> 2 systemic actions signed off.</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="showToast('Downloading LT-002 report PDF')">⬇ Download PDF</button>
+            <button class="btn btn-outline btn-sm" onclick="navigate('actions')">View Actions (2)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="page" id="page-actions">
+      <h1>Systemic Actions</h1>
+      <p class="subtitle">System-level changes identified through Learning Teams</p>
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn btn-outline">⬇ Export Report</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>All Actions</h2></div>
+        <div class="card-body">
+          <div class="training-list">
+            <div class="training-item">
+              <div class="training-icon" style="background:var(--red-light);">🔧</div>
+              <div class="training-info">
+                <div class="training-title">Adjustable-height tool mount — Station 4C</div>
+                <div class="training-meta">From LT-001 · Owner: Ergonomics Eng. · High Priority</div>
+                <div class="training-meta" style="margin-top:2px; font-size:12px; color:var(--gray-900);">Reduces severity of wrist strain during shift changeover</div>
+              </div>
+              <span class="status pending">Open</span>
+            </div>
+            <div class="training-item">
+              <div class="training-icon" style="background:var(--orange-light);">📋</div>
+              <div class="training-info">
+                <div class="training-title">Standard handoff position protocol — Line 4</div>
+                <div class="training-meta">From LT-001 · Owner: Line 4 Supervisor · High Priority</div>
+                <div class="training-meta" style="margin-top:2px; font-size:12px; color:var(--gray-900);">Eliminates ambiguity in component transfer zone</div>
+              </div>
+              <span class="status pending">Open</span>
+            </div>
+            <div class="training-item">
+              <div class="training-icon" style="background:var(--orange-light);">📅</div>
+              <div class="training-info">
+                <div class="training-title">Station 4C ergonomic audit — quarterly cycle</div>
+                <div class="training-meta">From LT-001 · Owner: Safety Team · Medium Priority</div>
+                <div class="training-meta" style="margin-top:2px; font-size:12px; color:var(--gray-900);">Builds ongoing detection for ergonomic drift</div>
+              </div>
+              <span class="status review">Scheduled</span>
+            </div>
+            <div class="training-item">
+              <div class="training-icon" style="background:var(--red-light);">⚡</div>
+              <div class="training-info">
+                <div class="training-title">Replace all paint arm hydraulic fittings >2 years</div>
+                <div class="training-meta">From LT-002 · Owner: Maintenance · High Priority</div>
+                <div class="training-meta" style="margin-top:2px; font-size:12px; color:var(--gray-900);">Removes aging components before failure threshold</div>
+              </div>
+              <span class="status review">In Progress</span>
+            </div>
+            <div class="training-item">
+              <div class="training-icon" style="background:var(--green-light);">✅</div>
+              <div class="training-info">
+                <div class="training-title">Add quarterly hydraulic inspection to PM schedule</div>
+                <div class="training-meta">From LT-002 · Owner: PM Team · Medium Priority</div>
+                <div class="training-meta" style="margin-top:2px; font-size:12px; color:var(--gray-900);">Closes the schedule gap that allowed undetected wear</div>
+              </div>
+              <span class="status completed">✓ Complete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI INSIGHTS -->
+    <div class="page" id="page-insights">
+      <h1>AI Insights</h1>
+      <p class="subtitle">Patterns surfaced from incident data across Detroit Assembly</p>
+
+      <div class="two-col">
+        <div>
+          <div class="card">
+            <div class="card-header"><h2>Risk Patterns</h2></div>
+            <div class="card-body">
+              <div class="insight-list">
+                <div class="insight-item risk">
+                  <div class="insight-label">High Risk Pattern</div>
+                  <div class="insight-text"><strong>Wrist strain during shift changeover on Line 4</strong> — 3 incidents in 30 days. Pattern correlation: early AM shift, same workstation cluster, operators new within 90 days.</div>
+                  <div class="insight-cta">
+                    <button class="btn btn-danger btn-sm" onclick="showToast('Escalation sent to EHS Director')">Escalate</button>
+                    <button class="btn btn-outline btn-sm" style="margin-left:6px;" onclick="openLTModal()">Convene Learning Team</button>
+                  </div>
+                </div>
+                <div class="insight-item warn">
+                  <div class="insight-label">Trend Warning</div>
+                  <div class="insight-text"><strong>Eye injury near-misses up 40%</strong> in Welding over 60 days. Workers report PPE discomfort as a factor in 2 of 3 cases. Consider ergonomic PPE review.</div>
+                </div>
+                <div class="insight-item">
+                  <div class="insight-label">Positive Signal</div>
+                  <div class="insight-text">Zero laceration incidents on Line 4 in 45 days — down from 4 in the prior period. Systemic fix is holding.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header"><h2>Recommended Participants</h2></div>
+            <div class="card-body">
+              <div class="insight-list">
+                <div class="insight-item" style="background:var(--green-light); border-left-color:var(--green);">
+                  <div class="insight-label" style="color:var(--green);">LT-001</div>
+                  <div class="insight-text">For Wrist Injury Learning Team: <strong>Chris W.</strong> — 8 years on Line 2, high contextual knowledge of station ergonomics, high peer trust score (94th percentile), available next week.</div>
+                  <div class="insight-cta">
+                    <button class="btn btn-success btn-sm" onclick="showToast('Chris W. invited to LT-001')">Invite Chris W.</button>
+                  </div>
+                </div>
+                <div class="insight-item" style="background:var(--green-light); border-left-color:var(--green);">
+                  <div class="insight-label" style="color:var(--green);">LT-001</div>
+                  <div class="insight-text">For Wrist Injury Learning Team: <strong>Tony R.</strong> — directly experienced the incident, can speak to work-as-done context, willing to participate in the investigation.</div>
+                  <div class="insight-cta">
+                    <button class="btn btn-success btn-sm" onclick="showToast('Tony R. confirmed for LT-001')">Confirm Tony R.</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h2>Action Effectiveness</h2></div>
+            <div class="card-body">
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                    <span>LT-002: Hydraulic inspection added (complete)</span><strong style="color:var(--green)">0 spills since</strong>
+                  </div>
+                  <div class="progress-bar-wrap" style="height:8px;"><div class="progress-bar" style="width:100%; height:8px;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                    <span>LT-002: Replace hydraulic fittings (in progress)</span><strong style="color:var(--orange)">60% done</strong>
+                  </div>
+                  <div class="progress-bar-wrap" style="height:8px;"><div class="progress-bar" style="width:60%; height:8px; background:var(--orange);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                    <span>LT-001: Tool mount — Station 4C (open)</span><strong style="color:var(--red)">Not started</strong>
+                  </div>
+                  <div class="progress-bar-wrap" style="height:8px;"><div class="progress-bar" style="width:0%; height:8px; background:var(--red);"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SITE MAP -->
+    <div class="page" id="page-sites">
+      <h1>Global Site Map</h1>
+      <p class="subtitle">Incident trends and learning team activity across all manufacturing sites</p>
+      <div class="card">
+        <div class="card-body">
+          <div class="site-map">
+            <div class="site-card">
+              <div class="site-name">Detroit Assembly</div>
+              <div class="site-geo">🇺🇸 North America</div>
+              <div class="site-metric"><span>Open Incidents</span><span class="mval risk">7</span></div>
+              <div class="site-metric"><span>Learning Teams</span><span class="mval ok">2</span></div>
+            </div>
+            <div class="site-card">
+              <div class="site-name">Ingolstadt Plant</div>
+              <div class="site-geo">🇩🇪 Europe</div>
+              <div class="site-metric"><span>Open Incidents</span><span class="mval ok">2</span></div>
+              <div class="site-metric"><span>Learning Teams</span><span class="mval ok">1</span></div>
+            </div>
+            <div class="site-card">
+              <div class="site-name">Pune Assembly</div>
+              <div class="site-geo">🇮🇳 South Asia</div>
+              <div class="site-metric"><span>Open Incidents</span><span class="mval risk">11</span></div>
+              <div class="site-metric"><span>Learning Teams</span><span class="mval risk">0</span></div>
+            </div>
+            <div class="site-card">
+              <div class="site-name">São Paulo Plant</div>
+              <div class="site-geo">🇧🇷 Latin America</div>
+              <div class="site-metric"><span>Open Incidents</span><span class="mval">4</span></div>
+              <div class="site-metric"><span>Learning Teams</span><span class="mval ok">1</span></div>
+            </div>
+            <div class="site-card">
+              <div class="site-name">Shanghai Factory</div>
+              <div class="site-geo">🇨🇳 East Asia</div>
+              <div class="site-metric"><span>Open Incidents</span><span class="mval">5</span></div>
+              <div class="site-metric"><span>Learning Teams</span><span class="mval ok">1</span></div>
+            </div>
+            <div class="site-card">
+              <div class="site-name">Pretoria Plant</div>
+              <div class="site-geo">🇿🇦 Africa</div>
+              <div class="site-metric"><span>Open Incidents</span><span class="mval ok">1</span></div>
+              <div class="site-metric"><span>Learning Teams</span><span class="mval ok">1</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI STITCH WALKTHROUGH -->
+    <div class="page" id="page-walkthrough">
+      <div class="wt-wrap">
+        <h1>AI Stitch — live walkthrough 🧵</h1>
+        <p class="subtitle">Watch how AI stitches into the injury-reporting workflow, end to end.</p>
+
+        <div class="wt-progress" id="wt-progress">
+          <div class="wt-step-pill active" data-step="1"><span class="wt-step-n">STEP 01</span><span class="wt-step-t">Worker reports</span></div>
+          <div class="wt-step-pill" data-step="2"><span class="wt-step-n">STEP 02</span><span class="wt-step-t">AI scans corpus</span></div>
+          <div class="wt-step-pill" data-step="3"><span class="wt-step-n">STEP 03</span><span class="wt-step-t">Pattern surfaced</span></div>
+          <div class="wt-step-pill" data-step="4"><span class="wt-step-n">STEP 04</span><span class="wt-step-t">Summary drafted</span></div>
+          <div class="wt-step-pill" data-step="5"><span class="wt-step-n">STEP 05</span><span class="wt-step-t">Actions suggested</span></div>
+        </div>
+
+        <div class="wt-stage" id="wt-stage">
+
+          <!-- STEP 1: Worker reports -->
+          <div class="wt-screen active" data-screen="1">
+            <div class="wt-eyebrow">Step 01 — worker</div>
+            <h3>Tap the body map. Structured data, zero friction.</h3>
+            <div class="wt-body">
+              <p>A line operator pulls up the EHSS app on a shop-floor tablet. They tap exactly where it hurts. The app captures structured incident data — body part, shift, station, severity — without forcing them to write a paragraph.</p>
+              <div class="wt-bodymap">
+                <svg viewBox="0 0 100 200" width="120" height="240" aria-label="Body map">
+                  <ellipse class="body-part" cx="50" cy="20" rx="14" ry="16" />
+                  <rect class="body-part" x="44" y="34" width="12" height="8" rx="3" />
+                  <ellipse class="body-part" cx="26" cy="50" rx="11" ry="7" />
+                  <ellipse class="body-part" cx="74" cy="50" rx="11" ry="7" />
+                  <rect class="body-part" x="34" y="44" width="32" height="46" rx="5" />
+                  <rect class="body-part" x="16" y="56" width="11" height="26" rx="4" />
+                  <rect class="body-part" x="73" y="56" width="11" height="26" rx="4" />
+                  <rect class="body-part" x="14" y="84" width="10" height="24" rx="4" />
+                  <rect class="body-part" x="76" y="84" width="10" height="24" rx="4" />
+                  <ellipse class="body-part selected" cx="19" cy="114" rx="8" ry="6" />
+                  <ellipse class="body-part" cx="81" cy="114" rx="8" ry="6" />
+                  <rect class="body-part" x="34" y="92" width="14" height="34" rx="4" />
+                  <rect class="body-part" x="52" y="92" width="14" height="34" rx="4" />
+                  <rect class="body-part" x="34" y="130" width="14" height="32" rx="4" />
+                  <rect class="body-part" x="52" y="130" width="14" height="32" rx="4" />
+                  <ellipse class="body-part" cx="41" cy="168" rx="9" ry="6" />
+                  <ellipse class="body-part" cx="59" cy="168" rx="9" ry="6" />
+                </svg>
+                <div class="wt-bm-info">
+                  <div class="lbl">CAPTURED</div>
+                  <div class="val">Left wrist · Station B-12 · 06:42 AM</div>
+                  <div class="sub">operator_tenure: 47 days · shift: early · pain_level: 6/10 · task: rivet-gun cycle</div>
+                </div>
+              </div>
+              <p><strong>No prose required.</strong> The worker is back to work in under 90 seconds.</p>
+            </div>
+            <div class="wt-cta">
+              <button class="btn btn-primary" onclick="wtGo(2)">Continue — let AI scan the corpus →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: AI scans corpus -->
+          <div class="wt-screen" data-screen="2">
+            <div class="wt-eyebrow">Step 02 — AI</div>
+            <h3>Claude scans 12 months of incident reports.</h3>
+            <div class="wt-body">
+              <p>The new report drops into a queue. A background agent vectorizes the body-part, shift, station, and operator-tenure features, then runs similarity search across 4,217 historical incidents. Anomalies and clusters get flagged.</p>
+              <div class="wt-console" id="wt-console-2"></div>
+            </div>
+            <div class="wt-cta">
+              <button class="btn btn-outline btn-sm" onclick="wtGo(1)">← Back</button>
+              <button class="btn btn-primary" id="wt-step2-next" disabled>Reveal pattern →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Pattern surfaced -->
+          <div class="wt-screen" data-screen="3">
+            <div class="wt-eyebrow">Step 03 — pattern</div>
+            <h3>Three wrist injuries. Same station. 30 days.</h3>
+            <div class="wt-body">
+              <p>Hand-curated rules would have missed this. The model surfaces a cluster that no single supervisor was in a position to see.</p>
+              <div class="wt-pattern">
+                <div class="wt-pat-card">
+                  <div class="lbl">CLUSTER</div>
+                  <div class="val">3× left-wrist · Station B-12</div>
+                  <div class="sub">window: 30 days · same shift · operator tenure < 90d</div>
+                </div>
+                <div class="wt-pat-card">
+                  <div class="lbl">CONFIDENCE</div>
+                  <div class="val">93.4%</div>
+                  <div class="sub">grounded in 11 prior incident reports · 2 toolbox-talk transcripts</div>
+                </div>
+                <div class="wt-pat-card">
+                  <div class="lbl">LIKELY CAUSE</div>
+                  <div class="val">Rivet-gun cycle time</div>
+                  <div class="sub">new SOP shortened cycle by 1.4s on 2026-02-14 — wrist incidents rose afterward</div>
+                </div>
+                <div class="wt-pat-card">
+                  <div class="lbl">SUGGESTED</div>
+                  <div class="val">Convene Learning Team</div>
+                  <div class="sub">non-punitive review · pull operators, supervisor, ergonomist</div>
+                </div>
+              </div>
+            </div>
+            <div class="wt-cta">
+              <button class="btn btn-outline btn-sm" onclick="wtGo(2)">← Back</button>
+              <button class="btn btn-primary" onclick="wtGo(4)">Draft the summary →</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: Summary -->
+          <div class="wt-screen" data-screen="4">
+            <div class="wt-eyebrow">Step 04 — synthesis</div>
+            <h3>Learning Team summary, drafted in seconds.</h3>
+            <div class="wt-body">
+              <p>The agent transcribes the Learning Team call, grounds the draft against the original incident reports, then writes the systemic summary that humans review and sign off on.</p>
+              <div class="wt-summary" id="wt-summary"></div>
+            </div>
+            <div class="wt-cta">
+              <button class="btn btn-outline btn-sm" onclick="wtGo(3)">← Back</button>
+              <button class="btn btn-primary" id="wt-step4-next" disabled>Generate actions →</button>
+            </div>
+          </div>
+
+          <!-- STEP 5: Actions -->
+          <div class="wt-screen" data-screen="5">
+            <div class="wt-eyebrow">Step 05 — close the loop</div>
+            <h3>From summary to system change.</h3>
+            <div class="wt-body">
+              <p>Action items get drafted, assigned, and tracked. The loop closes — and the trust loop opens.</p>
+              <div class="wt-actions">
+                <div class="wt-act-card">
+                  <div class="lbl">ENG · HIGH</div>
+                  <div class="val">Tune rivet-gun cycle back to 5.2s on B-12</div>
+                  <div class="sub">owner: line-eng-04 · due: 2026-04-02</div>
+                </div>
+                <div class="wt-act-card">
+                  <div class="lbl">PROCESS · MED</div>
+                  <div class="val">Add wrist-warm-up to early-shift toolbox talk</div>
+                  <div class="sub">owner: safety-lead-detroit · due: 2026-03-29</div>
+                </div>
+                <div class="wt-act-card">
+                  <div class="lbl">TRAINING · MED</div>
+                  <div class="val">90-day refresher for new operators on B-12</div>
+                  <div class="sub">owner: training-team · due: rolling</div>
+                </div>
+              </div>
+              <p style="margin-top:18px;"><strong>Systemic improvements follow.</strong> Error-tolerant design built. Non-punitive review. Psychological safety &amp; trust improves.</p>
+            </div>
+            <div class="wt-cta">
+              <button class="btn btn-outline btn-sm" onclick="wtGo(4)">← Back</button>
+              <button class="btn btn-success" onclick="wtRestart()">↺ Run the demo again</button>
+              <button class="btn btn-outline btn-sm" onclick="navigate('dashboard')">Back to dashboard</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- INCIDENT DETAIL MODAL -->
+<div class="modal-overlay" id="incident-modal">
+  <div class="modal" style="position:relative;">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <h2 id="modal-title">Incident Details</h2>
+    <div class="modal-sub" id="modal-meta"></div>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Close</button>
+      <button class="btn btn-success" onclick="approveIncident()">✓ Convene Learning Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEARNING TEAM SUMMARY MODAL -->
+<div class="modal-overlay" id="lt-modal">
+  <div class="modal" style="position:relative;">
+    <button class="close-btn" onclick="closeLTModal()">✕</button>
+    <h2>Learning Team Summary</h2>
+    <div class="modal-sub">LT-001 — Wrist Injury Pattern · Line 4 · In Progress</div>
+    <div class="insight-item" style="margin-bottom:16px;">
+      <div class="insight-label">Draft Summary</div>
+      <div class="insight-text">Station 4C, shift changeover. Contributing factors: tool mount height not adjusted between shifts; no handoff position protocol. <strong>Root cause: system design, not worker error.</strong></div>
+    </div>
+    <div style="padding:12px; background:var(--green-light); border-radius:8px; font-size:13px; margin-bottom:16px;">
+      <strong style="color:var(--green);">Suggested Actions</strong>
+      <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+        <div>① Install adjustable-height tool mount at Station 4C</div>
+        <div>② Define and post standard handoff position protocol at station boundary</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeLTModal()">Close</button>
+      <button class="btn btn-success" onclick="closeLTModal(); showToast('Summary submitted for management sign-off')">Submit for Sign-Off</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const incidents = [
+    { id: 1, title: "Wrist Strain During Shift Changeover", meta: "Line 4 · Tony R. · Mar 18, 2026", severity: "high", status: "pending", tags: ["Ergonomic", "Shift Change", "Line 4"], description: "During the shift changeover handoff on Line 4, I reached across the assembly station to hand off a component to the incoming shift worker. The angle and weight caused a sharp pain in my right wrist. I was not using the standard transfer platform.", prevention: "Use the component transfer platform at every handoff. Make sure the next shift worker is positioned before you pass. Don't reach across the station boundary.", bodyParts: ["Right Wrist / Hand"] },
+    { id: 2, title: "Eye Exposure — Weld Spatter (Near Miss)", meta: "Welding · Dana K. · Mar 22, 2026", severity: "medium", status: "approved", tags: ["Eye Safety", "PPE", "Near Miss"], description: "Weld spatter reached my face shield gap while working on the door frame seam. The spatter didn't hit my eye but came very close. My shield was slightly lifted to wipe sweat.", prevention: "Never lift the face shield while the welding arc is active. Use the cooling vent feature on the new shields instead of lifting. Buddy system for long welding sessions.", bodyParts: ["Head"] },
+    { id: 3, title: "Slip on Hydraulic Fluid Spill", meta: "Paint · Marcus T. · Mar 24, 2026", severity: "medium", status: "pending", tags: ["Housekeeping", "Slip / Fall", "Paint"], description: "A hydraulic line fitting on the paint arm was leaking. Fluid accumulated on the floor and I slipped while walking between stations. No injury but I fell against the railing.", prevention: "Report any fluid leaks immediately. Don't walk through visible pooled fluid. Place a wet floor sign and notify maintenance before continuing work.", bodyParts: ["Left Shin / Calf", "Left Knee"] },
+    { id: 4, title: "Laceration from Burr on Door Panel", meta: "Assembly · James M. · Mar 12, 2026", severity: "low", status: "approved", tags: ["Laceration", "Assembly", "PPE"], description: "I cut my finger on an unfinished metal edge on a door panel during installation. I was wearing standard gloves but not cut-resistant gloves.", prevention: "Always use cut-resistant gloves (Level C or higher) when handling raw door panels before edge-finishing is confirmed. Check the panel spec sheet.", bodyParts: ["Left Wrist / Hand"] }
+  ];
+
+  let selectedBodyParts = {};
+
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('aside a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('aside a').forEach(a => {
+      if (a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + page + "'")) a.classList.add('active');
+    });
+    if (page === 'incidents') renderIncidents('incidents-list');
+    if (page === 'dashboard') renderIncidents('dashboard-incidents', 2);
+  }
+
+  function renderIncidents(containerId, limit) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const data = limit ? incidents.slice(0, limit) : incidents;
+    container.innerHTML = data.map(inc => `
+      <div class="incident-item" onclick="openIncident(${inc.id})">
+        <div class="severity-dot ${inc.severity}"></div>
+        <div class="incident-info">
+          <div class="incident-title">${inc.title}</div>
+          <div class="incident-meta">${inc.meta}</div>
+          <div class="incident-tags">
+            ${inc.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+            <span class="status ${inc.status === 'approved' ? 'approved' : 'pending'}">${inc.status === 'approved' ? '✓ Approved' : 'Pending Review'}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function openIncident(id) {
+    const inc = incidents.find(i => i.id === id);
+    document.getElementById('modal-title').textContent = inc.title;
+    document.getElementById('modal-meta').textContent = inc.meta + ' · Severity: ' + inc.severity.toUpperCase();
+    document.getElementById('modal-body').innerHTML = `
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--gray-600); margin-bottom:6px; letter-spacing:0.5px;">What Happened</div>
+        <div style="font-size:14px; line-height:1.65;">${inc.description}</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--gray-600); margin-bottom:6px; letter-spacing:0.5px;">What Could Prevent This</div>
+        <div style="font-size:14px; line-height:1.65;">${inc.prevention}</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--gray-600); margin-bottom:6px; letter-spacing:0.5px;">Affected Areas</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          ${inc.bodyParts.map(p => `<span class="tag blue">${p}</span>`).join('')}
+        </div>
+      </div>
+      <div style="margin-top:16px; padding:14px; background:var(--blue-light); border-radius:10px; font-size:13px; border-left:3px solid var(--blue);">
+        <strong>Pattern detected — Learning Team recommended</strong>
+        <br><span style="color:var(--gray-600); margin-top:4px; display:block;">This incident may be connected to others at the same station. A Learning Team can surface the system cause.</span>
+      </div>
+    `;
+    document.getElementById('incident-modal').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('incident-modal').classList.remove('open'); }
+  function approveIncident() { closeModal(); showToast('Learning Team convened — investigation underway'); }
+  function openReportModal() { navigate('report'); }
+  function submitIncident() { showToast('Incident submitted for Safety Manager review'); setTimeout(() => navigate('dashboard'), 1200); }
+
+  function toggleBodyPart(id, label) {
+    const el = document.getElementById('bp-' + id);
+    if (selectedBodyParts[id]) { delete selectedBodyParts[id]; el.classList.remove('selected'); }
+    else { selectedBodyParts[id] = label; el.classList.add('selected'); }
+    renderSelectedParts();
+  }
+
+  function renderSelectedParts() {
+    const container = document.getElementById('selected-parts');
+    const parts = Object.values(selectedBodyParts);
+    if (parts.length === 0) {
+      container.innerHTML = '<div style="color:var(--gray-400); font-size:13px; font-style:italic;">Tap a body area to select it</div>';
+    } else {
+      container.innerHTML = parts.map(p => `<div class="selected-part-item"><div class="dot"></div>${p}</div>`).join('');
+    }
+  }
+
+  function openLTModal() { document.getElementById('lt-modal').classList.add('open'); }
+  function closeLTModal() { document.getElementById('lt-modal').classList.remove('open'); }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  renderIncidents('dashboard-incidents', 2);
+
+  /* ════════════════════════════════════════════════════════════════════
+     AI STITCH WALKTHROUGH — simulated streaming + step orchestration
+     ════════════════════════════════════════════════════════════════════ */
+
+  const wtSteps = document.querySelectorAll('.wt-step-pill');
+  const wtScreens = document.querySelectorAll('.wt-screen');
+  let wtCurrent = 1;
+  let wtStreamTimer = null;
+  const wtSeen = new Set([1]);
+
+  function wtGo(n) {
+    if (wtStreamTimer) { clearTimeout(wtStreamTimer); wtStreamTimer = null; }
+    wtCurrent = n;
+    wtScreens.forEach(s => s.classList.toggle('active', +s.dataset.screen === n));
+    wtSteps.forEach(p => {
+      const sn = +p.dataset.step;
+      p.classList.remove('active','done');
+      if (sn === n) p.classList.add('active');
+      else if (wtSeen.has(sn) && sn < n) p.classList.add('done');
+      else if (sn < n) p.classList.add('done');
+    });
+    wtSeen.add(n);
+
+    if (n === 2) wtStartScan();
+    if (n === 4) wtStreamSummary();
+  }
+
+  wtSteps.forEach(p => p.addEventListener('click', () => wtGo(+p.dataset.step)));
+
+  function wtRestart() {
+    wtSeen.clear(); wtSeen.add(1);
+    wtGo(1);
+  }
+
+  // Step 2 — simulated scanning console
+  const wtScanLines = [
+    { t: 200, html: '<span class="ai-prompt">$</span> stitch-agent scan --report=rep-3104 --window=12mo' },
+    { t: 380, html: '\n<span class="ai-key">loading</span> <span class="ai-val">4,217 incident reports …</span>' },
+    { t: 380, html: ' <span class="ai-ok">ok</span>' },
+    { t: 380, html: '\n<span class="ai-key">vectorize</span> <span class="ai-val">body_part · station · shift · tenure</span>' },
+    { t: 320, html: ' <span class="ai-ok">ok</span>' },
+    { t: 380, html: '\n<span class="ai-key">embed</span>      <span class="ai-val">dim=768 · model=voyage-3</span>' },
+    { t: 320, html: ' <span class="ai-ok">ok</span>' },
+    { t: 380, html: '\n<span class="ai-key">retrieve</span>   <span class="ai-val">top-k similar incidents …</span>' },
+    { t: 480, html: ' <span class="ai-ok">k=11</span>' },
+    { t: 420, html: '\n<span class="ai-key">cluster</span>    <span class="ai-val">DBSCAN ε=0.18 …</span>' },
+    { t: 420, html: ' <span class="ai-ok">3 clusters</span>' },
+    { t: 380, html: '\n<span class="ai-key">flag</span>       <span class="ai-hi">CLUSTER_A · 3× left-wrist · Station B-12 · 30d</span>' },
+    { t: 420, html: '\n<span class="ai-key">reason</span>     <span class="ai-val">temp=0.2 · grounded in 11 docs · citing 2 SOP changes</span>' },
+    { t: 420, html: '\n<span class="ai-ok">✓</span> <span class="ai-val">pattern surfaced · confidence 93.4% · ready for human review</span>' },
+  ];
+
+  function wtStartScan() {
+    const el = document.getElementById('wt-console-2');
+    const nextBtn = document.getElementById('wt-step2-next');
+    if (!el) return;
+    el.innerHTML = '<span class="ai-cursor"></span>';
+    nextBtn.disabled = true;
+    let i = 0;
+    function tick() {
+      if (i >= wtScanLines.length) {
+        el.innerHTML = el.innerHTML.replace('<span class="ai-cursor"></span>','');
+        nextBtn.disabled = false;
+        nextBtn.onclick = () => wtGo(3);
+        return;
+      }
+      const line = wtScanLines[i++];
+      el.innerHTML = el.innerHTML.replace('<span class="ai-cursor"></span>','') + line.html + '<span class="ai-cursor"></span>';
+      wtStreamTimer = setTimeout(tick, line.t);
+    }
+    wtStreamTimer = setTimeout(tick, 250);
+  }
+
+  // Step 4 — simulated summary streaming
+  const wtSummaryChunks = [
+    '<h4>LT-001 · Learning Team Summary — DRAFT</h4>',
+    '<p><strong>Pattern.</strong> Three left-wrist strain incidents at Station B-12, all on the early shift, all involving operators within their first 90 days. Window: 2026-02-18 → 2026-03-19.</p>',
+    '<p><strong>Context.</strong> On 2026-02-14, the rivet-gun cycle SOP was tightened from 6.6s → 5.2s to lift throughput. Wrist incidents on B-12 rose 4× in the following 30 days.</p>',
+    '<p><strong>Root cause (systemic, not individual).</strong> Cycle-time change interacted with operator tenure: experienced operators absorbed the change via micro-adjustments in grip and stance; new operators lacked the muscle memory and over-rotated the wrist on every cycle.</p>',
+    '<p><strong>What did <em>not</em> cause this.</strong> No operator error. No PPE compliance issue. No equipment defect on the gun itself.</p>',
+    '<p><strong>Recommendation.</strong> Tune cycle time back to a tenure-aware threshold on B-12; add a wrist-warm-up to the early-shift toolbox talk; build a 90-day refresher loop for new operators.</p>',
+    '<p style="color: var(--ink-mute); font-family: var(--mono); font-size: 11px; margin-top:14px;">// grounded in 11 incident reports · 2 SOP changelogs · 1 Learning Team transcript · temperature=0.2 · citations attached</p>',
+  ];
+
+  function wtStreamSummary() {
+    const el = document.getElementById('wt-summary');
+    const nextBtn = document.getElementById('wt-step4-next');
+    if (!el) return;
+    el.innerHTML = '';
+    nextBtn.disabled = true;
+    let i = 0;
+    function tick() {
+      if (i >= wtSummaryChunks.length) {
+        nextBtn.disabled = false;
+        nextBtn.onclick = () => wtGo(5);
+        return;
+      }
+      el.innerHTML += wtSummaryChunks[i++];
+      el.scrollTop = el.scrollHeight;
+      wtStreamTimer = setTimeout(tick, 650);
+    }
+    wtStreamTimer = setTimeout(tick, 300);
+  }
+</script>
+</body>
+</html>

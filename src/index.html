@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIT 2026 — Speaker Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple:      #4A0E8F;
+      --purple-mid:  #7C3AED;
+      --purple-lite: #EDE9FE;
+      --purple-xl:   #F5F3FF;
+      --blue:        #1D4ED8;
+      --blue-lite:   #DBEAFE;
+      --green:       #059669;
+      --green-lite:  #D1FAE5;
+      --orange:      #D97706;
+      --orange-lite: #FEF3C7;
+      --red:         #DC2626;
+      --red-lite:    #FEE2E2;
+      --teal:        #0D9488;
+      --gold:        #B45309;
+      --gray-50:  #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-400: #94A3B8;
+      --gray-600: #475569;
+      --gray-900: #0F172A;
+      --r: 12px;
+      --sh: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--purple-xl);
+      color: var(--gray-900);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 62px;
+      background: linear-gradient(135deg, #050012 0%, #1E0038 40%, #4C1D95 80%, #6D28D9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      box-shadow: 0 4px 24px rgba(76,29,149,0.45), 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .nav-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .nav-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      font-weight: 400;
+    }
+
+    .nav-right { display: flex; align-items: center; }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    /* TAB BAR */
+    .tab-bar {
+      background: #fff;
+      height: 50px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--gray-200);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 62px;
+      z-index: 90;
+      padding: 0 28px;
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .tab:hover { color: var(--purple-mid); }
+
+    .tab.active {
+      color: var(--purple-mid);
+      border-bottom-color: var(--purple-mid);
+    }
+
+    .tab-icon { font-size: 15px; }
+
+    /* TAB PANELS */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* SLIDES WRAP */
+    .slides-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 36px 28px 60px;
+    }
+
+    /* SESSION HEADER */
+    .session-header {
+      background: linear-gradient(135deg, #1E0038 0%, #4C1D95 55%, #7C3AED 100%);
+      border-radius: 16px;
+      padding: 40px 44px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(76,29,149,0.35);
+    }
+
+    .session-header::before,
+    .session-header::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .session-header::before {
+      width: 320px;
+      height: 320px;
+      top: -80px;
+      right: -60px;
+    }
+
+    .session-header::after {
+      width: 200px;
+      height: 200px;
+      bottom: -60px;
+      left: 200px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .sh-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 14px;
+    }
+
+    .session-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sh-thesis {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.7;
+      max-width: 700px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sh-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sh-chip {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.9);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    /* DECK LABEL */
+    .deck-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+
+    /* SPEAKERS */
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .speaker-card {
+      background: #fff;
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+
+    .speaker-banner {
+      height: 6px;
+      background: linear-gradient(90deg, var(--purple-mid), #8b5cf6, #ec4899);
+    }
+
+    .speaker-body { padding: 20px; }
+
+    .speaker-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--purple-mid));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+    }
+
+    .speaker-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gray-900);
+      letter-spacing: -0.3px;
+    }
+
+    .speaker-title {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 2px;
+    }
+
+    .speaker-company {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--purple-mid);
+      margin-top: 2px;
+    }
+
+    .speaker-bio {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--gray-600);
+    }
+
+    .speaker-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .speaker-tag {
+      background: var(--purple-lite);
+      color: var(--purple-mid);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* SLIDE CARDS (grid thumbnails) */
+    .slide-deck {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .slide-card {
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      transition: transform 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-deck .slide-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+    }
+
+    /* Slide color themes */
+    .sv-purple { background: linear-gradient(135deg, #1E0038 0%, #4C1D95 55%, #7C3AED 100%); }
+    .sv-blue   { background: linear-gradient(135deg, #0c1445 0%, #1D4ED8 100%); }
+    .sv-teal   { background: linear-gradient(135deg, #042f2e 0%, #0D9488 100%); }
+    .sv-green  { background: linear-gradient(135deg, #052e16 0%, #059669 100%); }
+    .sv-orange { background: linear-gradient(135deg, #431407 0%, #C2410C 55%, #EA580C 100%); }
+    .sv-gold   { background: linear-gradient(135deg, #451a03 0%, #B45309 55%, #D97706 100%); }
+
+    .sc-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sc-num {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .sc-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.1);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .sc-body {
+      padding: 14px;
+      flex: 1;
+    }
+
+    .sc-headline {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+
+    .sc-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.55;
+    }
+
+    .sc-bullets {
+      list-style: none;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .sc-bullets li {
+      font-size: 12px;
+      color: rgba(255,255,255,0.82);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .sc-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: rgba(255,255,255,0.5);
+      font-weight: 700;
+    }
+
+    .sc-flow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .sc-flow-item {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .sc-flow-arr {
+      color: rgba(255,255,255,0.45);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .sc-ftr {
+      padding: 8px 14px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 10px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+    }
+
+    /* FULL-SIZE SLIDE (presentation view inside slide tabs) */
+    .slide-fullsize {
+      min-height: 460px;
+      border-radius: 16px;
+      box-shadow: 0 8px 36px rgba(0,0,0,0.25);
+      cursor: default;
+      margin-bottom: 24px;
+    }
+    .slide-fullsize:hover { transform: none; }
+    .slide-fullsize .sc-hdr { padding: 18px 28px 16px; }
+    .slide-fullsize .sc-num { font-size: 13px; letter-spacing: 1.1px; }
+    .slide-fullsize .sc-tag { font-size: 12px; padding: 4px 14px; border-radius: 14px; }
+    .slide-fullsize .sc-body {
+      padding: 52px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .slide-fullsize .sc-headline {
+      font-size: 44px;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      margin-bottom: 0;
+    }
+    .slide-fullsize .sc-sub {
+      font-size: 19px;
+      line-height: 1.65;
+      margin-top: 18px;
+    }
+    .slide-fullsize .sc-bullets { gap: 14px; margin-top: 28px; }
+    .slide-fullsize .sc-bullets li {
+      font-size: 19px;
+      line-height: 1.5;
+      padding-left: 24px;
+    }
+    .slide-fullsize .sc-bullets li::before { font-size: 22px; top: -2px; }
+    .slide-fullsize .sc-flow { gap: 10px; margin-top: 26px; }
+    .slide-fullsize .sc-flow-item {
+      font-size: 15px;
+      padding: 8px 18px;
+      border-radius: 8px;
+    }
+    .slide-fullsize .sc-flow-arr { font-size: 20px; }
+    .slide-fullsize .sc-ftr {
+      padding: 16px 28px;
+      font-size: 13px;
+    }
+
+    /* KEY TAKEAWAYS */
+    .kt-wrap { margin-bottom: 36px; }
+
+    .kt-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .kt-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      padding: 20px 18px;
+    }
+
+    .kt-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .kt-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+
+    .kt-desc {
+      font-size: 12px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* TIMER STRIP — only visible on slide tabs */
+    .timer-strip {
+      display: none;
+      background: #fff;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 14px 28px;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 112px;
+      z-index: 80;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    body.in-slide .timer-strip { display: flex; }
+
+    .t-clock {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+      color: var(--purple-mid);
+      min-width: 80px;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+
+    .t-track-wrap { flex: 1; min-width: 0; }
+
+    .t-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .t-labels span {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .t-track {
+      display: flex;
+      height: 8px;
+      border-radius: 99px;
+      overflow: hidden;
+      gap: 2px;
+    }
+
+    .t-seg {
+      height: 100%;
+      border-radius: 2px;
+      transition: opacity 0.3s;
+    }
+
+    .t-controls { display: flex; gap: 8px; align-items: center; }
+
+    /* SCRIPT / NOTES PANELS */
+    .script-panel {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      overflow: hidden;
+    }
+
+    .sp-hdr {
+      background: var(--gray-50);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .sp-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--purple-mid);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sp-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-900);
+      flex: 1;
+    }
+
+    .sp-time {
+      font-size: 12px;
+      color: var(--gray-400);
+      font-weight: 500;
+    }
+
+    .sp-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* CALLOUT BOXES */
+    .say, .engage, .do, .demo, .key {
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.65;
+      border-left: 4px solid;
+    }
+
+    .say    { background: #FAF8FF; border-left-color: var(--purple-mid); color: var(--gray-900); }
+    .engage { background: var(--purple-lite); border-left-color: var(--purple); color: var(--gray-900); }
+    .do     { background: #FFF7ED; border-left-color: var(--orange); color: var(--gray-900); }
+    .demo   { background: #CCFBF1; border-left-color: var(--teal); color: var(--gray-900); }
+    .key    { background: #FFFBEB; border-left-color: var(--gold); color: var(--gray-900); }
+
+    .lbl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .say .lbl    { color: var(--purple-mid); }
+    .engage .lbl { color: var(--purple); }
+    .do .lbl     { color: var(--orange); }
+    .demo .lbl   { color: var(--teal); }
+    .key .lbl    { color: var(--gold); }
+
+    /* HOT TAKE */
+    .hot-take {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .ht-hdr {
+      background: var(--purple-mid);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 16px;
+      letter-spacing: 0.3px;
+    }
+
+    .ht-body {
+      background: var(--purple-xl);
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--gray-900);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ht-quote {
+      background: rgba(124,58,237,0.1);
+      border-left: 3px solid var(--purple-mid);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--purple);
+      line-height: 1.6;
+    }
+
+    .ht-src {
+      font-size: 11px;
+      color: var(--gray-400);
+      font-style: italic;
+    }
+
+    .ht-cta {
+      background: #fff;
+      padding: 12px 16px;
+      font-size: 13px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    /* Q&A LIST */
+    .qa-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .qa-list li {
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .qa-list li strong {
+      display: block;
+      color: var(--gray-900);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .qa-list li span {
+      color: var(--gray-600);
+    }
+
+    /* SLIDE NAV (prev/next inside slide tabs) */
+    .slide-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .slide-nav-btn {
+      background: var(--purple-mid);
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.12s, opacity 0.12s;
+    }
+
+    .slide-nav-btn:hover { background: #6d28d9; }
+    .slide-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .slide-counter {
+      font-size: 12px;
+      color: var(--gray-400);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-purple {
+      background: var(--purple-mid);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+    }
+
+    .btn-purple:hover { background: #6d28d9; }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--gray-600);
+      border: 1.5px solid var(--gray-200);
+    }
+
+    .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); color: var(--gray-900); }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <div class="nav-title">WIT 2026 · The Future of Tech</div>
+    <div class="nav-sub">How Women Product Managers Can Shape Industry Trends</div>
+  </div>
+  <div class="nav-right" style="display:flex; gap:8px;">
+    <button class="nav-btn" onclick="window.open('deck.html','_blank')">🎬 Open Slide Deck</button>
+    <button class="nav-btn" onclick="window.open('operational-learning.html','_blank')">💻 Open POC Demo</button>
+  </div>
+</nav>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab active" id="tab-overview" onclick="switchTab('overview')">
+    <span class="tab-icon">👥</span> Overview
+  </div>
+  <div class="tab" id="tab-slide1" onclick="switchTab('slide1')">
+    <span class="tab-icon">1️⃣</span> Opening
+  </div>
+  <div class="tab" id="tab-slide2" onclick="switchTab('slide2')">
+    <span class="tab-icon">2️⃣</span> Problem
+  </div>
+  <div class="tab" id="tab-slide3" onclick="switchTab('slide3')">
+    <span class="tab-icon">3️⃣</span> Framework
+  </div>
+  <div class="tab" id="tab-slide4" onclick="switchTab('slide4')">
+    <span class="tab-icon">4️⃣</span> Demo
+  </div>
+  <div class="tab" id="tab-slide5" onclick="switchTab('slide5')">
+    <span class="tab-icon">5️⃣</span> Women + AI
+  </div>
+  <div class="tab" id="tab-slide6" onclick="switchTab('slide6')">
+    <span class="tab-icon">6️⃣</span> CTA
+  </div>
+  <div class="tab" id="tab-summary" onclick="switchTab('summary')">
+    <span class="tab-icon">📊</span> Summary
+  </div>
+</div>
+
+<!-- SHARED TIMER (visible only on slide tabs) -->
+<div class="timer-strip">
+  <div class="t-clock" id="clock">00:00</div>
+  <div class="t-track-wrap">
+    <div class="t-labels">
+      <span>Hook (0–2)</span>
+      <span>Problem (2–5)</span>
+      <span>Framework (5–10)</span>
+      <span>Demo (10–15)</span>
+      <span>Women+AI (15–18)</span>
+      <span>CTA (18–20)</span>
+    </div>
+    <div class="t-track">
+      <div class="t-seg" style="flex:1;   background:#7C3AED;"></div>
+      <div class="t-seg" style="flex:1.5; background:#1D4ED8;"></div>
+      <div class="t-seg" style="flex:2.5; background:#0D9488;"></div>
+      <div class="t-seg" style="flex:2.5; background:#059669;"></div>
+      <div class="t-seg" style="flex:1.5; background:#C2410C;"></div>
+      <div class="t-seg" style="flex:1;   background:#B45309;"></div>
+    </div>
+  </div>
+  <div class="t-controls">
+    <button class="btn btn-purple btn-sm" id="timer-btn" onclick="toggleTimer()">▶ Start</button>
+    <button class="btn btn-outline btn-sm" onclick="resetTimer()">↺</button>
+  </div>
+</div>
+
+<!-- TAB: OVERVIEW -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="slides-wrap">
+
+    <!-- Session Header -->
+    <div class="session-header">
+      <div class="sh-eyebrow">Women in Tech · 20-Minute Session · 2026</div>
+      <h1>The Future of Tech: How Women Product Managers Can Shape Industry Trends</h1>
+      <div class="sh-thesis">
+        AI is a material — woven into workflows that already exist. Women PMs are positioned to stitch it in effectively, ethically, and with lasting impact.
+      </div>
+      <div class="sh-chips">
+        <span class="sh-chip">⏱ 20 Min</span>
+        <span class="sh-chip">🤖 AI × Workflows</span>
+        <span class="sh-chip">💻 Live POC</span>
+        <span class="sh-chip">🌍 EHSS · Automotive</span>
+        <span class="sh-chip">🧵 Stitch, Don't Bolt</span>
+      </div>
+    </div>
+
+    <!-- Speakers -->
+    <div class="deck-label">Meet the Speakers</div>
+    <div class="speakers-grid" style="margin-bottom:32px;">
+      <div class="speaker-card">
+        <div class="speaker-banner"></div>
+        <div class="speaker-body">
+          <div style="display:flex; align-items:flex-start; gap:16px;">
+            <div class="speaker-avatar">SR</div>
+            <div>
+              <div class="speaker-name">Sheril Retson</div>
+              <div class="speaker-title">Sr. Staff Technical Program Manager, EHS&S</div>
+            </div>
+          </div>
+          <p class="speaker-bio" style="margin-top:14px;">
+            <strong>Technical leader with 14 years of experience</strong> driving enterprise-scale technology initiatives and digital transformation. Specializing in <strong>AI-powered solutions</strong> and advancing Environment, Health, Safety, and Security programs at scale.
+          </p>
+          <div class="speaker-tags">
+            <span class="speaker-tag">AI/ML Deployment</span>
+            <span class="speaker-tag">EHS&S</span>
+            <span class="speaker-tag">Digital Transformation</span>
+            <span class="speaker-tag">Enterprise Scale</span>
+          </div>
+          <div style="margin-top:14px; font-size:12px; color:var(--gray-600);">📖 Reader &nbsp;·&nbsp; 🚵 Mountain Biker &nbsp;·&nbsp; ✈️ World Traveler &nbsp;·&nbsp; 🐱 Mom to 4 cats</div>
+        </div>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-banner"></div>
+        <div class="speaker-body">
+          <div style="display:flex; align-items:flex-start; gap:16px;">
+            <div class="speaker-avatar" style="background:linear-gradient(135deg,var(--teal),var(--blue));">NJ</div>
+            <div>
+              <div class="speaker-name">Neelima Jyesta</div>
+              <div class="speaker-title">Senior Technical Product Manager</div>
+            </div>
+          </div>
+          <p class="speaker-bio" style="margin-top:14px;">
+            Passionate about <strong>building AI-driven products with real-world impact</strong> — especially across business operations, supply chain processes, and enterprise workflows. Believes the best technology disappears into the workflow and just makes things work.
+          </p>
+          <div class="speaker-tags">
+            <span class="speaker-tag">AI Product</span>
+            <span class="speaker-tag">Enterprise Workflows</span>
+            <span class="speaker-tag">Supply Chain</span>
+            <span class="speaker-tag">Ops Strategy</span>
+          </div>
+          <div style="margin-top:14px; font-size:12px; color:var(--gray-600);">🍜 Restaurant Explorer &nbsp;·&nbsp; 🎨 Painter &nbsp;·&nbsp; 🥾 Short Hikes &nbsp;·&nbsp; 🌍 Adventurer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deck thumbnails (click to open the slide tab) -->
+    <div class="deck-label">The Deck — Click any slide to open it</div>
+    <div class="slide-deck">
+      <div class="slide-card sv-purple" onclick="switchTab('slide1')">
+        <div class="sc-hdr"><div class="sc-num">01 · Opening</div><div class="sc-tag">0–2 min</div></div>
+        <div class="sc-body">
+          <div class="sc-headline">The future of AI is being built without us.</div>
+          <ul class="sc-bullets" style="margin-top:6px;">
+            <li>80% of women exposed to AI automation</li>
+            <li>26% of AI jobs — and falling</li>
+            <li>4:1 displacement ratio</li>
+          </ul>
+        </div>
+        <div class="sc-ftr">Women in Tech · 2026</div>
+      </div>
+      <div class="slide-card sv-blue" onclick="switchTab('slide2')">
+        <div class="sc-hdr"><div class="sc-num">02 · Problem</div><div class="sc-tag">2–5 min</div></div>
+        <div class="sc-body">
+          <div class="sc-headline">Safety data dies in the blame loop.</div>
+          <div class="sc-flow" style="margin-top:8px;">
+            <div class="sc-flow-item">Incident</div><div class="sc-flow-arr">→</div>
+            <div class="sc-flow-item">Investigation</div><div class="sc-flow-arr">→</div>
+            <div class="sc-flow-item">Report</div><div class="sc-flow-arr">→</div>
+            <div class="sc-flow-item" style="opacity:.45; text-decoration:line-through;">Learning</div>
+          </div>
+          <div class="sc-sub" style="margin-top:8px;">Workers know what's dangerous. Fear keeps them silent.</div>
+        </div>
+        <div class="sc-ftr">EHSS · Automotive Manufacturing</div>
+      </div>
+      <div class="slide-card sv-teal" onclick="switchTab('slide3')">
+        <div class="sc-hdr"><div class="sc-num">03 · Framework</div><div class="sc-tag">5–10 min</div></div>
+        <div class="sc-body">
+          <div class="sc-headline">Stitch AI in.<br>Don't bolt it on.</div>
+          <div class="sc-flow" style="margin-top:8px; flex-wrap:wrap; gap:4px;">
+            <div class="sc-flow-item">Find the Gap</div><div class="sc-flow-arr">→</div>
+            <div class="sc-flow-item" style="background:rgba(255,255,255,0.35); font-weight:900;">Fix the Trust</div><div class="sc-flow-arr">→</div>
+            <div class="sc-flow-item">Stitch AI In</div><div class="sc-flow-arr">→</div>
+            <div class="sc-flow-item">System Learns</div>
+          </div>
+        </div>
+        <div class="sc-ftr">Operational Learning · The Stitch Framework</div>
+      </div>
+      <div class="slide-card sv-green" onclick="switchTab('slide4')">
+        <div class="sc-hdr"><div class="sc-num">04 · Demo</div><div class="sc-tag">10–15 min</div></div>
+        <div class="sc-body">
+          <div class="sc-headline">Watch AI stitch into a workflow in real time.</div>
+          <ul class="sc-bullets" style="margin-top:8px;">
+            <li>Worker taps body map → structured incident data</li>
+            <li>AI detects: 3 wrist injuries, same station, 30 days</li>
+            <li>Learning Team convenes — systemic root cause found</li>
+            <li>AI summarizes findings + suggests actions. Loop closes.</li>
+          </ul>
+        </div>
+        <div class="sc-ftr">Live POC · Operational Learning Platform</div>
+      </div>
+      <div class="slide-card sv-orange" onclick="switchTab('slide5')">
+        <div class="sc-hdr"><div class="sc-num">05 · Women + AI</div><div class="sc-tag">15–18 min</div></div>
+        <div class="sc-body">
+          <div class="sc-headline">The skills you already have are the skills AI needs.</div>
+          <ul class="sc-bullets" style="margin-top:8px;">
+            <li>Inclusive research → fairer data</li>
+            <li>Trust-first design → better input</li>
+            <li>Empathy for edge users → fewer blind spots</li>
+            <li>Systemic thinking → AI integrated</li>
+          </ul>
+        </div>
+        <div class="sc-ftr">You don't need a new title. A new lens.</div>
+      </div>
+      <div class="slide-card sv-gold" onclick="switchTab('slide6')">
+        <div class="sc-hdr"><div class="sc-num">06 · CTA</div><div class="sc-tag">18–20 min</div></div>
+        <div class="sc-body">
+          <div class="sc-headline">Leave with one question.</div>
+          <div class="sc-sub" style="margin-top:8px; font-weight:800;">"Redesign the table so more seats exist."</div>
+        </div>
+        <div class="sc-ftr">Thank you · Q&A</div>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="deck-label">Key Takeaways</div>
+    <div class="kt-wrap">
+      <div class="kt-grid-4">
+        <div class="kt-card"><div class="kt-icon">🔍</div><div class="kt-title">Find the Workflow Gap</div><div class="kt-desc">Where are the people who know the most not generating data? That's your AI entry point.</div></div>
+        <div class="kt-card"><div class="kt-icon">🛡️</div><div class="kt-title">Fix Trust First</div><div class="kt-desc">Anonymous by default. Worker sees output before management. Safety is infrastructure, not culture.</div></div>
+        <div class="kt-card"><div class="kt-icon">🧵</div><div class="kt-title">Stitch, Don't Bolt</div><div class="kt-desc">AI that requires a new tool fails. AI woven into existing workflows sticks.</div></div>
+        <div class="kt-card"><div class="kt-icon">📢</div><div class="kt-title">Use Your Voice</div><div class="kt-desc">Ask "who does this harm if it's wrong?" at every review. That paper trail becomes policy.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TAB: SLIDE 1 — OPENING -->
+<div class="tab-panel" id="panel-slide1">
+  <div class="slides-wrap">
+    <div class="slide-card slide-fullsize sv-purple">
+      <div class="sc-hdr">
+        <div class="sc-num">01 · Opening</div>
+        <div class="sc-tag">0–2 min</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-headline">The future of AI is being built without us.</div>
+        <ul class="sc-bullets">
+          <li>80% of women exposed to AI automation</li>
+          <li>26% of AI jobs — and falling</li>
+          <li>4:1 displacement ratio</li>
+        </ul>
+      </div>
+      <div class="sc-ftr">Women in Tech · 2026</div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="slide-nav-btn" onclick="switchTab('overview')">← Overview</button>
+      <span class="slide-counter">Slide 1 of 6</span>
+      <button class="slide-nav-btn" onclick="switchTab('slide2')">Next: Problem →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: SLIDE 2 — PROBLEM -->
+<div class="tab-panel" id="panel-slide2">
+  <div class="slides-wrap">
+    <div class="slide-card slide-fullsize sv-blue">
+      <div class="sc-hdr">
+        <div class="sc-num">02 · Problem</div>
+        <div class="sc-tag">2–5 min</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-headline">Safety data dies in the blame loop.</div>
+        <div class="sc-flow">
+          <div class="sc-flow-item">Incident</div><div class="sc-flow-arr">→</div>
+          <div class="sc-flow-item">Investigation</div><div class="sc-flow-arr">→</div>
+          <div class="sc-flow-item">Report</div><div class="sc-flow-arr">→</div>
+          <div class="sc-flow-item" style="opacity:.45; text-decoration:line-through;">Learning</div>
+        </div>
+        <div class="sc-sub">Workers know what's dangerous. Fear keeps them silent.</div>
+      </div>
+      <div class="sc-ftr">EHSS · Automotive Manufacturing</div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="slide-nav-btn" onclick="switchTab('slide1')">← Opening</button>
+      <span class="slide-counter">Slide 2 of 6</span>
+      <button class="slide-nav-btn" onclick="switchTab('slide3')">Next: Framework →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: SLIDE 3 — FRAMEWORK -->
+<div class="tab-panel" id="panel-slide3">
+  <div class="slides-wrap">
+    <div class="slide-card slide-fullsize sv-teal">
+      <div class="sc-hdr">
+        <div class="sc-num">03 · Framework</div>
+        <div class="sc-tag">5–10 min</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-headline">Stitch AI in.<br>Don't bolt it on.</div>
+        <div class="sc-flow" style="flex-wrap:wrap;">
+          <div class="sc-flow-item">Find the Gap</div><div class="sc-flow-arr">→</div>
+          <div class="sc-flow-item" style="background:rgba(255,255,255,0.35); font-weight:900;">Fix the Trust</div><div class="sc-flow-arr">→</div>
+          <div class="sc-flow-item">Stitch AI In</div><div class="sc-flow-arr">→</div>
+          <div class="sc-flow-item">System Learns</div>
+        </div>
+      </div>
+      <div class="sc-ftr">Operational Learning · The Stitch Framework</div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="slide-nav-btn" onclick="switchTab('slide2')">← Problem</button>
+      <span class="slide-counter">Slide 3 of 6</span>
+      <button class="slide-nav-btn" onclick="switchTab('slide4')">Next: Demo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: SLIDE 4 — DEMO -->
+<div class="tab-panel" id="panel-slide4">
+  <div class="slides-wrap">
+    <div class="slide-card slide-fullsize sv-green">
+      <div class="sc-hdr">
+        <div class="sc-num">04 · Demo</div>
+        <div class="sc-tag">10–15 min</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-headline">Watch AI stitch into a workflow in real time.</div>
+        <ul class="sc-bullets">
+          <li>Worker taps body map → structured incident data</li>
+          <li>AI detects: 3 wrist injuries, same station, 30 days</li>
+          <li>Learning Team convenes — systemic root cause found</li>
+          <li>AI summarizes findings + suggests actions. Loop closes.</li>
+        </ul>
+      </div>
+      <div class="sc-ftr">Live POC · Operational Learning Platform</div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="slide-nav-btn" onclick="switchTab('slide3')">← Framework</button>
+      <span class="slide-counter">Slide 4 of 6</span>
+      <button class="slide-nav-btn" onclick="switchTab('slide5')">Next: Women + AI →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: SLIDE 5 — WOMEN + AI -->
+<div class="tab-panel" id="panel-slide5">
+  <div class="slides-wrap">
+    <div class="slide-card slide-fullsize sv-orange">
+      <div class="sc-hdr">
+        <div class="sc-num">05 · Women + AI</div>
+        <div class="sc-tag">15–18 min</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-headline">The skills you already have are the skills AI needs.</div>
+        <ul class="sc-bullets">
+          <li>Inclusive research → fairer data</li>
+          <li>Trust-first design → better input</li>
+          <li>Empathy for edge users → fewer blind spots</li>
+          <li>Systemic thinking → AI integrated</li>
+        </ul>
+      </div>
+      <div class="sc-ftr">You don't need a new title. A new lens.</div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="slide-nav-btn" onclick="switchTab('slide4')">← Demo</button>
+      <span class="slide-counter">Slide 5 of 6</span>
+      <button class="slide-nav-btn" onclick="switchTab('slide6')">Next: CTA →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: SLIDE 6 — CTA -->
+<div class="tab-panel" id="panel-slide6">
+  <div class="slides-wrap">
+    <div class="slide-card slide-fullsize sv-gold">
+      <div class="sc-hdr">
+        <div class="sc-num">06 · CTA</div>
+        <div class="sc-tag">18–20 min</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-headline">Leave with one question.</div>
+        <div class="sc-sub" style="font-weight:700; font-size:22px; color:rgba(255,255,255,0.92);">"Redesign the table so more seats exist."</div>
+      </div>
+      <div class="sc-ftr">Thank you · Q&A</div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="slide-nav-btn" onclick="switchTab('slide5')">← Women + AI</button>
+      <span class="slide-counter">Slide 6 of 6</span>
+      <button class="slide-nav-btn" onclick="switchTab('summary')">Summary →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: SUMMARY -->
+<div class="tab-panel" id="panel-summary">
+  <div class="slides-wrap">
+
+    <div class="deck-label">Key Takeaways</div>
+    <div class="kt-wrap">
+      <div class="kt-grid-4">
+        <div class="kt-card"><div class="kt-icon">🔍</div><div class="kt-title">Find the Workflow Gap</div><div class="kt-desc">Where are the people who know the most not generating data? That's your AI entry point.</div></div>
+        <div class="kt-card"><div class="kt-icon">🛡️</div><div class="kt-title">Fix Trust First</div><div class="kt-desc">Anonymous by default. Worker sees output before management. Safety is infrastructure, not culture.</div></div>
+        <div class="kt-card"><div class="kt-icon">🧵</div><div class="kt-title">Stitch, Don't Bolt</div><div class="kt-desc">AI that requires a new tool fails. AI woven into existing workflows sticks.</div></div>
+        <div class="kt-card"><div class="kt-icon">📢</div><div class="kt-title">Use Your Voice</div><div class="kt-desc">Ask "who does this harm if it's wrong?" at every review. That paper trail becomes policy.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    const panel = document.getElementById('panel-' + name);
+    const tab   = document.getElementById('tab-' + name);
+    if (panel) panel.classList.add('active');
+    if (tab)   tab.classList.add('active');
+    document.body.classList.toggle('in-slide', /^slide\d+$/.test(name));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let secs = 0, running = false, iv = null;
+  const breaks = [120, 300, 600, 900, 1080, 1200];
+
+  function toggleTimer() {
+    if (running) { clearInterval(iv); running = false; document.getElementById('timer-btn').textContent = '▶ Resume'; }
+    else { iv = setInterval(tick, 1000); running = true; document.getElementById('timer-btn').textContent = '⏸ Pause'; }
+  }
+
+  function tick() {
+    secs++;
+    const m = String(Math.floor(secs / 60)).padStart(2,'0');
+    const s = String(secs % 60).padStart(2,'0');
+    const c = document.getElementById('clock');
+    c.textContent = m + ':' + s;
+    c.style.color = secs > 1080 ? '#DC2626' : secs > 900 ? '#D97706' : '#7C3AED';
+    const segs = document.querySelectorAll('.t-seg');
+    let active = 0;
+    for (let i = 0; i < breaks.length - 1; i++) { if (secs >= breaks[i]) active = i + 1; }
+    segs.forEach((el, i) => { el.style.opacity = i === active ? '1' : '0.3'; });
+  }
+
+  function resetTimer() {
+    clearInterval(iv); running = false; secs = 0;
+    document.getElementById('clock').textContent = '00:00';
+    document.getElementById('clock').style.color = '#7C3AED';
+    document.getElementById('timer-btn').textContent = '▶ Start';
+    document.querySelectorAll('.t-seg').forEach(el => el.style.opacity = '1');
+  }
+
+  // Arrow-key navigation between slide tabs
+  document.addEventListener('keydown', function(e) {
+    const m = (document.querySelector('.tab-panel.active') || {}).id || '';
+    const match = m.match(/^panel-slide(\d+)$/);
+    if (!match) return;
+    const n = parseInt(match[1], 10);
+    if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && n < 6) switchTab('slide' + (n + 1));
+    if ((e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   && n > 1) switchTab('slide' + (n - 1));
+  });
+</script>
+</body>
+</html>

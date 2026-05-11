@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIT 2026 — Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Tokyo Night-inspired palette — muted, IDE-like */
+      --bg-deep:    #0a0e1a;
+      --bg-mid:     #13182a;
+      --ink:        #c0caf5;
+      --ink-dim:    #9aa5ce;
+      --ink-mute:   #6b7394;
+      --accent-blue:   #7aa2f7;
+      --accent-cyan:   #7dcfff;
+      --accent-mint:   #9ece6a;
+      --accent-purple: #bb9af7;
+      --accent-rose:   #f7768e;
+      --accent-amber:  #e0af68;
+      --accent-orange: #ff9e64;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-deep);
+      color: var(--ink);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* MINI TOP BAR */
+    .topbar {
+      height: 44px;
+      background: linear-gradient(180deg, #0d1320 0%, #0a0e1a 100%);
+      border-bottom: 1px solid rgba(122,162,247,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .topbar-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-dim);
+      letter-spacing: 0.4px;
+    }
+
+    .topbar-title::before {
+      content: '~/ ';
+      color: var(--accent-cyan);
+      opacity: 0.7;
+    }
+
+    .topbar-right { display: flex; gap: 8px; }
+
+    .topbar-btn {
+      background: rgba(122,162,247,0.08);
+      border: 1px solid rgba(122,162,247,0.22);
+      color: var(--ink-dim);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topbar-btn:hover {
+      background: rgba(122,162,247,0.18);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    /* STAGE — fullscreen slide area */
+    .stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      min-height: 0;
+      position: relative;
+    }
+
+    .slide {
+      width: 100%;
+      max-width: 1400px;
+      aspect-ratio: 16 / 9;
+      max-height: 100%;
+      border-radius: 14px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(122,162,247,0.10);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(160deg, var(--bg-mid) 0%, var(--bg-deep) 100%);
+      --accent: var(--accent-blue);
+    }
+
+    .slide.active { display: flex; }
+
+    /* Subtle dot-grid texture across every slide */
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(192,202,245,0.06) 1px, transparent 0);
+      background-size: 22px 22px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Accent glow per slide — driven by --accent */
+    .slide::after {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+      opacity: 0.10;
+      pointer-events: none;
+      filter: blur(20px);
+      z-index: 0;
+    }
+
+    /* color themes — all share dark slate base, vary the accent */
+    .theme-purple { --accent: var(--accent-purple); }
+    .theme-blue   { --accent: var(--accent-blue); }
+    .theme-teal   { --accent: var(--accent-cyan); }
+    .theme-green  { --accent: var(--accent-mint); }
+    .theme-orange { --accent: var(--accent-orange); }
+    .theme-gold   { --accent: var(--accent-amber); }
+    .theme-indigo { --accent: var(--accent-blue); }
+    .theme-rose   { --accent: var(--accent-rose); }
+
+    .slide-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 44px 18px;
+      border-bottom: 1px solid rgba(122,162,247,0.10);
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      color: var(--ink-mute);
+    }
+
+    .slide-num::before {
+      content: '> ';
+      color: var(--accent);
+    }
+
+    .slide-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .slide-body {
+      flex: 1;
+      padding: 4.5% 6%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      min-height: 0;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      color: var(--accent);
+      margin-bottom: 18px;
+      opacity: 0.85;
+    }
+
+    .eyebrow::before {
+      content: '// ';
+      opacity: 0.6;
+    }
+
+    .slide h1 {
+      font-size: clamp(28px, 4.4vw, 58px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: var(--ink);
+    }
+
+    .slide h1 strong, .slide h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .slide h2 {
+      font-size: clamp(24px, 3.6vw, 46px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      color: var(--ink);
+    }
+
+    .lede {
+      font-size: clamp(15px, 1.6vw, 21px);
+      line-height: 1.6;
+      color: var(--ink-dim);
+      margin-top: 22px;
+      max-width: 920px;
+    }
+
+    .bullets {
+      list-style: none;
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bullets li {
+      font-size: clamp(15px, 1.5vw, 20px);
+      line-height: 1.5;
+      color: var(--ink-dim);
+      padding-left: 28px;
+      position: relative;
+    }
+
+    .bullets li strong { color: var(--ink); }
+
+    .bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      top: 1px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .stat {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-radius: 10px;
+      padding: 22px 22px;
+      position: relative;
+    }
+
+    .stat::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 16px;
+      bottom: 16px;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .stat-num {
+      font-family: var(--mono);
+      font-size: clamp(28px, 3.6vw, 48px);
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.6px;
+      line-height: 1.05;
+    }
+
+    .stat-label {
+      font-size: clamp(12px, 1.05vw, 14px);
+      color: var(--ink-dim);
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .flow-item {
+      font-family: var(--mono);
+      background: rgba(122,162,247,0.08);
+      border: 1px solid rgba(122,162,247,0.20);
+      color: var(--ink);
+      font-size: clamp(12px, 1.05vw, 14px);
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: 6px;
+    }
+
+    .flow-item.fade { opacity: 0.4; text-decoration: line-through; }
+    .flow-item.hi {
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .flow-arr {
+      color: var(--accent);
+      font-size: clamp(16px, 1.4vw, 20px);
+      font-weight: 600;
+      opacity: 0.7;
+    }
+
+    .quote {
+      margin-top: 26px;
+      padding: 22px 26px;
+      background: rgba(122,162,247,0.05);
+      border: 1px solid rgba(122,162,247,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+    }
+
+    .quote p {
+      font-size: clamp(13px, 1.3vw, 17px);
+      line-height: 1.65;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    .quote-source {
+      font-family: var(--mono);
+      font-size: clamp(10px, 0.95vw, 12px);
+      color: var(--accent);
+      margin-top: 12px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .speakers-row {
+      display: flex;
+      gap: 28px;
+      margin-top: 34px;
+    }
+
+    .spk {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spk-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    .spk-name {
+      font-size: clamp(14px, 1.2vw, 16px);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .spk-title {
+      font-family: var(--mono);
+      font-size: clamp(10px, 0.9vw, 12px);
+      color: var(--ink-mute);
+      letter-spacing: 0.2px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .split-card {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.14);
+      border-radius: 10px;
+      padding: 22px;
+      position: relative;
+    }
+
+    .split-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 22px;
+      right: 22px;
+      height: 2px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    .split-card h3 {
+      font-size: clamp(15px, 1.6vw, 22px);
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+
+    .split-card p {
+      font-size: clamp(12px, 1.1vw, 15px);
+      color: var(--ink-dim);
+      line-height: 1.55;
+    }
+
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .skill {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+    }
+
+    .skill-from {
+      font-size: clamp(13px, 1.25vw, 17px);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .skill-to {
+      font-family: var(--mono);
+      font-size: clamp(11px, 1vw, 13px);
+      color: var(--ink-dim);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .arrow-i {
+      color: var(--accent);
+      margin: 0 6px;
+      font-weight: 700;
+    }
+
+    /* "How we built it" — process slide */
+    .process {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .pstep {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-radius: 10px;
+      padding: 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .pstep.hi {
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    .pstep-n {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.6px;
+    }
+
+    .pstep-t {
+      font-size: clamp(12px, 1.1vw, 15px);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .pstep-d {
+      font-family: var(--mono);
+      font-size: clamp(10px, 0.85vw, 12px);
+      color: var(--ink-mute);
+      line-height: 1.45;
+    }
+
+    .shift {
+      margin-top: 20px;
+      padding: 16px 22px;
+      background: rgba(122,162,247,0.05);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .shift-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      opacity: 0.85;
+    }
+
+    .shift-title {
+      font-size: clamp(15px, 1.5vw, 21px);
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .shift-arrow { color: var(--accent); margin: 0 6px; }
+
+    .shift-desc {
+      font-size: clamp(12px, 1vw, 14px);
+      color: var(--ink-dim);
+      line-height: 1.55;
+    }
+
+    .stack {
+      margin-top: 18px;
+    }
+
+    .stack-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--ink-mute);
+      margin-bottom: 8px;
+    }
+
+    .stack-label::before {
+      content: '// ';
+      color: var(--accent);
+      opacity: 0.6;
+    }
+
+    .stack-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .stack-chip {
+      font-family: var(--mono);
+      display: inline-flex;
+      align-items: center;
+      background: rgba(122,162,247,0.06);
+      border: 1px solid rgba(122,162,247,0.22);
+      color: var(--ink);
+      font-size: clamp(11px, 0.95vw, 13px);
+      font-weight: 500;
+      padding: 5px 11px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* Manual × AI split (slide 6) */
+    .vs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .vs-col {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-radius: 10px;
+      padding: 14px 18px 16px;
+      position: relative;
+    }
+
+    .vs-manual { border-left: 3px solid var(--ink-mute); }
+    .vs-ai     { border-left: 3px solid var(--accent); }
+
+    .vs-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(122,162,247,0.15);
+    }
+
+    .vs-icon {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 5px;
+      letter-spacing: 0.3px;
+    }
+
+    .vs-manual .vs-icon {
+      background: rgba(154,165,206,0.10);
+      border: 1px solid rgba(154,165,206,0.30);
+      color: var(--ink-dim);
+    }
+
+    .vs-ai .vs-icon {
+      background: color-mix(in srgb, var(--accent) 15%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      color: var(--accent);
+    }
+
+    .vs-label {
+      font-size: clamp(15px, 1.4vw, 19px);
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .vs-sub {
+      font-family: var(--mono);
+      font-size: clamp(10px, 0.85vw, 11px);
+      color: var(--ink-mute);
+      margin-top: 2px;
+    }
+
+    .vs-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .vs-list li {
+      font-size: clamp(11px, 1vw, 13px);
+      line-height: 1.45;
+      color: var(--ink-dim);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .vs-manual .vs-list li::before {
+      content: '−';
+      position: absolute;
+      left: 0;
+      color: var(--ink-mute);
+      font-weight: 700;
+    }
+
+    .vs-ai .vs-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 1px;
+    }
+
+    .vs-list li strong { color: var(--ink); font-weight: 600; }
+    .vs-list li code {
+      font-family: var(--mono);
+      background: rgba(122,162,247,0.08);
+      color: var(--accent);
+      padding: 0 5px;
+      border-radius: 3px;
+      font-size: 0.92em;
+    }
+
+    /* AI engineering strip (tech · temperature · hallucination) */
+    .ai-eng {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .ai-eng-card {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-top: 2px solid var(--accent);
+      border-radius: 0 0 8px 8px;
+      padding: 10px 14px 12px;
+    }
+
+    .ai-eng-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .ai-eng-label::before { content: '// '; opacity: 0.55; }
+
+    .ai-eng-title {
+      font-family: var(--mono);
+      font-size: clamp(12px, 1.1vw, 14px);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .ai-eng-desc {
+      font-size: clamp(10px, 0.9vw, 12px);
+      color: var(--ink-dim);
+      line-height: 1.45;
+    }
+
+    /* Slide 6 — <> separator chip inside h1 */
+    .tag-sep {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.6em;
+      margin: 0 12px;
+      opacity: 0.75;
+      vertical-align: 0.15em;
+    }
+
+    /* Business · Shared · Technical (slide 6) — Venn-style 3-zone */
+    .venn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      gap: 10px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+
+    .venn-col {
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-radius: 10px;
+      padding: 12px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    .venn-business {
+      border-top: 2px solid var(--accent-rose);
+    }
+
+    .venn-tech {
+      border-top: 2px solid var(--accent-cyan);
+    }
+
+    .venn-shared {
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent-rose) 6%, rgba(122,162,247,0.04)) 0%,
+        color-mix(in srgb, var(--accent) 8%, rgba(122,162,247,0.04)) 50%,
+        color-mix(in srgb, var(--accent-cyan) 6%, rgba(122,162,247,0.04)) 100%);
+      border-top: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--accent-rose), var(--accent), var(--accent-cyan)) 1;
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent),
+                  0 4px 20px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+
+    .venn-shared::before {
+      content: '⟗';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 24px;
+      background: var(--bg-deep);
+      border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .venn-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      align-self: flex-start;
+    }
+
+    .venn-business .venn-tag {
+      background: color-mix(in srgb, var(--accent-rose) 14%, transparent);
+      color: var(--accent-rose);
+      border: 1px solid color-mix(in srgb, var(--accent-rose) 35%, transparent);
+    }
+
+    .venn-tech .venn-tag {
+      background: color-mix(in srgb, var(--accent-cyan) 14%, transparent);
+      color: var(--accent-cyan);
+      border: 1px solid color-mix(in srgb, var(--accent-cyan) 35%, transparent);
+    }
+
+    .venn-shared .venn-tag {
+      background: color-mix(in srgb, var(--accent) 16%, transparent);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    }
+
+    .venn-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .venn-list li {
+      font-size: clamp(11px, 1vw, 13px);
+      line-height: 1.4;
+      color: var(--ink-dim);
+      padding-left: 13px;
+      position: relative;
+    }
+
+    .venn-business .venn-list li::before { content: '·'; position: absolute; left: 4px; color: var(--accent-rose); font-weight: 700; }
+    .venn-tech     .venn-list li::before { content: '·'; position: absolute; left: 4px; color: var(--accent-cyan); font-weight: 700; }
+    .venn-shared   .venn-list li::before { content: '◆'; position: absolute; left: 0; color: var(--accent); font-size: 7px; top: 6px; }
+    .venn-shared   .venn-list li { color: var(--ink); font-weight: 500; }
+
+    /* "How to outshine" — PM success bullets (slide 6) */
+    .outshine {
+      margin-top: 18px;
+    }
+
+    .os-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--ink-mute);
+      margin-bottom: 10px;
+    }
+
+    .os-label::before {
+      content: '// ';
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    .os-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 22px;
+    }
+
+    .os-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 6px 0;
+    }
+
+    .os-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+      padding: 3px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      align-self: flex-start;
+      margin-top: 1px;
+    }
+
+    .os-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .os-title {
+      font-size: clamp(12px, 1.15vw, 15px);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .os-desc {
+      font-family: var(--mono);
+      font-size: clamp(10px, 0.9vw, 12px);
+      color: var(--ink-dim);
+      line-height: 1.4;
+    }
+
+    /* Open Questions (slide 8) */
+    .open-q-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .open-q {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 20px;
+      background: rgba(122,162,247,0.04);
+      border: 1px solid rgba(122,162,247,0.15);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .open-q:hover {
+      background: color-mix(in srgb, var(--accent) 6%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+
+    .open-q-n {
+      font-family: var(--mono);
+      font-size: clamp(11px, 1vw, 13px);
+      font-weight: 600;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+      padding: 4px 10px;
+      border-radius: 5px;
+      letter-spacing: 0.3px;
+      min-width: 38px;
+      text-align: center;
+    }
+
+    .open-q-text {
+      font-size: clamp(14px, 1.4vw, 19px);
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+
+    .open-q-text em {
+      color: var(--accent);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .big-q {
+      font-size: clamp(20px, 2.4vw, 30px);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--ink);
+      margin-top: 22px;
+      max-width: 1000px;
+    }
+
+    .tagline {
+      font-family: var(--mono);
+      font-size: clamp(12px, 1.1vw, 15px);
+      color: var(--accent);
+      margin-top: 18px;
+      opacity: 0.8;
+    }
+
+    .slide-ftr {
+      font-family: var(--mono);
+      padding: 12px 44px;
+      border-top: 1px solid rgba(122,162,247,0.10);
+      font-size: 11px;
+      color: var(--ink-mute);
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-ftr::before {
+      content: '$ ';
+      color: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* BOTTOM CONTROLS */
+    .controls {
+      flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(13,19,32,0.85) 0%, #0a0e1a 100%);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(122,162,247,0.12);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ctrl-btn {
+      background: rgba(122,162,247,0.08);
+      border: 1px solid rgba(122,162,247,0.22);
+      color: var(--ink);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+      flex-shrink: 0;
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--accent-blue) 20%, transparent);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    .counter {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.3px;
+      min-width: 56px;
+      text-align: center;
+    }
+
+    .counter span { color: var(--ink-mute); margin: 0 4px; }
+
+    .slider-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(122,162,247,0.15);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 2px solid var(--bg-deep);
+      cursor: pointer;
+      box-shadow: 0 0 0 1px var(--accent-blue), 0 0 12px rgba(122,162,247,0.5);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 2px solid var(--bg-deep);
+      cursor: pointer;
+      box-shadow: 0 0 0 1px var(--accent-blue), 0 0 12px rgba(122,162,247,0.5);
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 1px;
+      background: rgba(122,162,247,0.22);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s, width 0.15s;
+    }
+
+    .dot.active {
+      background: var(--accent-blue);
+      width: 18px;
+      box-shadow: 0 0 8px rgba(122,162,247,0.6);
+    }
+
+    .dot:hover:not(.active) { background: rgba(122,162,247,0.5); }
+
+    .hint {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink-mute);
+      letter-spacing: 0.3px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 720px) {
+      .stats { grid-template-columns: 1fr; gap: 10px; }
+      .split { grid-template-columns: 1fr; }
+      .skills { grid-template-columns: 1fr; }
+      .process { grid-template-columns: 1fr 1fr; }
+      .vs-grid { grid-template-columns: 1fr; }
+      .ai-eng { grid-template-columns: 1fr; }
+      .venn-grid { grid-template-columns: 1fr; }
+      .os-grid { grid-template-columns: 1fr; }
+      .speakers-row { flex-direction: column; gap: 14px; }
+      .shift { grid-template-columns: 1fr; }
+      .shift-label { writing-mode: horizontal-tb; transform: none; }
+      .hint { display: none; }
+      .slide-hdr { padding: 14px 20px 12px; }
+      .slide-body { padding: 22px 24px; }
+      .slide-ftr { padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">WIT 2026 · The Future of Tech</div>
+  <div class="topbar-right">
+    <a class="topbar-btn" href="index.html">← Speaker Guide</a>
+    <a class="topbar-btn" href="operational-learning.html" target="_blank">💻 POC Demo</a>
+  </div>
+</div>
+
+<div class="stage">
+
+  <!-- SLIDE 1: TITLE -->
+  <section class="slide theme-purple active" data-tag="Title">
+    <div class="slide-hdr">
+      <div class="slide-num">01 · Title</div>
+      <div class="slide-tag">Women in Tech · 2026</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">20-Minute Session</div>
+      <h1>The Future of Tech: How Women Product Managers Can Shape Industry Trends</h1>
+      <p class="lede">
+        AI is a material — woven into workflows that already exist. Women PMs are positioned to stitch it in effectively, ethically, and with lasting impact.
+      </p>
+      <div class="speakers-row">
+        <div class="spk">
+          <div class="spk-avatar">NJ</div>
+          <div>
+            <div class="spk-name">Neelima Jyesta</div>
+            <div class="spk-title">Senior Technical Product Manager</div>
+          </div>
+        </div>
+        <div class="spk">
+          <div class="spk-avatar">SR</div>
+          <div>
+            <div class="spk-name">Sheril Retson</div>
+            <div class="spk-title">Sr. Staff Technical Program Manager, EHS&amp;S</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-ftr">Women in Tech · 2026 · Opening</div>
+  </section>
+
+  <!-- SLIDE 2: OPENING / PROBLEM -->
+  <section class="slide theme-rose" data-tag="Opening">
+    <div class="slide-hdr">
+      <div class="slide-num">02 · Opening</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">The Hook</div>
+      <h1>The future of AI is being built without us.</h1>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num">80%</div>
+          <div class="stat-label">of women exposed to AI automation</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">26%</div>
+          <div class="stat-label">of AI jobs held by women — and falling</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4 : 1</div>
+          <div class="stat-label">displacement ratio</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-ftr">Source: Industry data on AI workforce impact</div>
+  </section>
+
+  <!-- SLIDE 3: PROBLEM -->
+  <section class="slide theme-blue" data-tag="Problem">
+    <div class="slide-hdr">
+      <div class="slide-num">03 · Problem</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">Two Failure Modes</div>
+      <h1>Two systems. Same outcome.</h1>
+      <div class="split">
+        <div class="split-card">
+          <h3>Safety data dies in the fault-attribution loop…</h3>
+          <p>Workers know what's dangerous. Fear keeps them silent. Reports fade. Learning never closes.</p>
+          <div class="flow" style="margin-top:18px;">
+            <div class="flow-item">Incident</div><div class="flow-arr">→</div>
+            <div class="flow-item">Investigation</div><div class="flow-arr">→</div>
+            <div class="flow-item">Report</div><div class="flow-arr">→</div>
+            <div class="flow-item fade">Learning</div>
+          </div>
+        </div>
+        <div class="split-card">
+          <h3>…AI without women breaks people</h3>
+          <p>Models trained on partial data inherit partial perspectives. Edge users — and the workers AI is supposed to help — pay the cost.</p>
+          <div class="flow" style="margin-top:18px;">
+            <div class="flow-item">Partial Data</div><div class="flow-arr">→</div>
+            <div class="flow-item">Blind Models</div><div class="flow-arr">→</div>
+            <div class="flow-item fade">Broken Trust</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-ftr">EHSS · Automotive Manufacturing</div>
+  </section>
+
+  <!-- SLIDE 4: FRAMEWORK -->
+  <section class="slide theme-teal" data-tag="Framework">
+    <div class="slide-hdr">
+      <div class="slide-num">04 · Framework</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">The Stitch Framework</div>
+      <h1>Stitch AI in.<br>Don't bolt it on.</h1>
+      <div class="flow" style="margin-top:22px;">
+        <div class="flow-item">Find the Gap</div><div class="flow-arr">→</div>
+        <div class="flow-item hi">Fix the Trust</div><div class="flow-arr">→</div>
+        <div class="flow-item">Stitch AI In</div><div class="flow-arr">→</div>
+        <div class="flow-item">System Learns</div>
+      </div>
+      <div class="quote">
+        <p>"We design systems that anticipate error rather than punish it. When incidents occur, Learning Teams bring together frontline workers, supervisors, and engineers to understand context — without attributing fault. This approach has fundamentally changed how we build and improve our processes."</p>
+        <div class="quote-source">— Tesla Impact Report</div>
+      </div>
+    </div>
+    <div class="slide-ftr">Operational Learning · Error-tolerant Design</div>
+  </section>
+
+  <!-- SLIDE 5: DEMO -->
+  <section class="slide theme-green" data-tag="Demo">
+    <div class="slide-hdr">
+      <div class="slide-num">05 · Demo</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">Live POC</div>
+      <h1>Watch AI stitch into injury reporting workflow in real time.</h1>
+      <ul class="bullets">
+        <li>Worker taps body map → structured incident data</li>
+        <li>AI detects: <strong>3 wrist injuries, same station, 30 days</strong></li>
+        <li>Operational Learning Team convenes — systemic cause found</li>
+        <li>AI summarizes findings + suggests actions</li>
+        <li>Systemic improvements follow · Error-tolerant design built · Non-punitive review · Psychological safety &amp; trust improves</li>
+      </ul>
+    </div>
+    <div class="slide-ftr">Live POC · Operational Learning Platform</div>
+  </section>
+
+  <!-- SLIDE 6: HOW WE BUILT IT -->
+  <section class="slide theme-gold" data-tag="How We Built It">
+    <div class="slide-hdr">
+      <div class="slide-num">06 · How We Built It</div>
+      <div class="slide-tag">Business × Technical PM</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">Two threads, one fabric.</div>
+      <h1>Business PM <span class="tag-sep">&lt;&gt;</span> Technical PM<br>stitched together.</h1>
+
+      <div class="venn-grid">
+        <div class="venn-col venn-business">
+          <span class="venn-tag">BUSINESS PM</span>
+          <ul class="venn-list">
+            <li>Customer outcomes &amp; adoption</li>
+            <li>ROI &amp; business case</li>
+            <li>Stakeholder alignment</li>
+            <li>Go-to-market &amp; rollout</li>
+            <li>Pricing &amp; positioning</li>
+          </ul>
+        </div>
+
+        <div class="venn-col venn-shared">
+          <span class="venn-tag">SHARED — where they meet</span>
+          <ul class="venn-list">
+            <li>Defining the problem statement</li>
+            <li>Success metrics &amp; eval criteria</li>
+            <li>User experience &amp; flow design</li>
+            <li>Solution brainstorm &amp; tradeoffs</li>
+            <li>Prototype review &amp; iteration</li>
+          </ul>
+        </div>
+
+        <div class="venn-col venn-tech">
+          <span class="venn-tag">TECHNICAL PM</span>
+          <ul class="venn-list">
+            <li>Architecture &amp; system design</li>
+            <li>Model selection per task</li>
+            <li>Prompt engineering &amp; chains</li>
+            <li>Eval, temp &amp; hallucination guardrails</li>
+            <li>Implementation &amp; observability</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="outshine">
+        <div class="os-label">How to outshine — PM moves that compound in the AI era</div>
+        <div class="os-grid">
+          <div class="os-item">
+            <span class="os-num">01</span>
+            <div class="os-text">
+              <div class="os-title">Learn the AI primitives</div>
+              <div class="os-desc">LLMs · RAG · embeddings · evals — enough to design with them</div>
+            </div>
+          </div>
+          <div class="os-item">
+            <span class="os-num">02</span>
+            <div class="os-text">
+              <div class="os-title">Match the model to the task</div>
+              <div class="os-desc">small/fast vs deep reasoning · weigh speed, cost, accuracy</div>
+            </div>
+          </div>
+          <div class="os-item">
+            <span class="os-num">03</span>
+            <div class="os-text">
+              <div class="os-title">Treat prompts like product specs</div>
+              <div class="os-desc">iterate · version · eval — define the ask precisely</div>
+            </div>
+          </div>
+          <div class="os-item">
+            <span class="os-num">04</span>
+            <div class="os-text">
+              <div class="os-title">Define AI success metrics</div>
+              <div class="os-desc">accuracy · hallucination rate · user trust · time-to-value</div>
+            </div>
+          </div>
+          <div class="os-item">
+            <span class="os-num">05</span>
+            <div class="os-text">
+              <div class="os-title">Ship a prototype, not a deck</div>
+              <div class="os-desc">code-assist your way to a working demo, not just wireframes</div>
+            </div>
+          </div>
+          <div class="os-item">
+            <span class="os-num">06</span>
+            <div class="os-text">
+              <div class="os-title">Ground every AI output</div>
+              <div class="os-desc">RAG context · citations · temperature controls · human review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-ftr">Two PM lenses · woven into one AI-native product</div>
+  </section>
+
+  <!-- SLIDE 7: WOMEN + AI -->
+  <section class="slide theme-orange" data-tag="Women + AI">
+    <div class="slide-hdr">
+      <div class="slide-num">07 · Women + AI</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">The Connection</div>
+      <h1>The skills you already have are the skills AI needs.</h1>
+      <div class="skills">
+        <div class="skill">
+          <div class="skill-from">Inclusive research <span class="arrow-i">→</span></div>
+          <div class="skill-to">fairer data</div>
+        </div>
+        <div class="skill">
+          <div class="skill-from">Trust-first design <span class="arrow-i">→</span></div>
+          <div class="skill-to">better input</div>
+        </div>
+        <div class="skill">
+          <div class="skill-from">Empathy for edge users <span class="arrow-i">→</span></div>
+          <div class="skill-to">fewer blind spots</div>
+        </div>
+        <div class="skill">
+          <div class="skill-from">Systemic thinking <span class="arrow-i">→</span></div>
+          <div class="skill-to">AI integrated, not bolted on</div>
+        </div>
+        <div class="skill">
+          <div class="skill-from">Defining the ask <span class="arrow-i">→</span></div>
+          <div class="skill-to">clear specs, fewer reworks</div>
+        </div>
+        <div class="skill">
+          <div class="skill-from">Prompt engineering <span class="arrow-i">→</span></div>
+          <div class="skill-to">AI delivers intent, not noise</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-ftr">Women PMs · Built for this moment</div>
+  </section>
+
+  <!-- SLIDE 8: OPEN QUESTIONS -->
+  <section class="slide theme-purple" data-tag="Open Questions">
+    <div class="slide-hdr">
+      <div class="slide-num">08 · Open Questions</div>
+    </div>
+    <div class="slide-body">
+      <div class="eyebrow">Leave the room with these…</div>
+      <h1>Open questions.</h1>
+      <div class="open-q-list">
+        <div class="open-q">
+          <div class="open-q-n">Q1</div>
+          <div class="open-q-text">How would you redesign the table to build more seats — and more <em>trust</em>?</div>
+        </div>
+        <div class="open-q">
+          <div class="open-q-n">Q2</div>
+          <div class="open-q-text">Where is your team <em>bolting on</em> AI when it should be <em>stitched in</em>?</div>
+        </div>
+        <div class="open-q">
+          <div class="open-q-n">Q3</div>
+          <div class="open-q-text">Whose voice is missing from your training data?</div>
+        </div>
+        <div class="open-q">
+          <div class="open-q-n">Q4</div>
+          <div class="open-q-text">What <em>fault-attribution loop</em> in your org is hiding a learning opportunity?</div>
+        </div>
+      </div>
+      <div class="tagline">In the age of AI …</div>
+    </div>
+    <div class="slide-ftr">Thank you · Women in Tech 2026</div>
+  </section>
+
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="prevBtn" aria-label="Previous slide">‹</button>
+  <div class="counter"><span id="curN">1</span><span>/</span><span id="totN">8</span></div>
+  <div class="slider-wrap">
+    <input type="range" class="slider" id="slider" min="1" max="8" value="1" step="1" aria-label="Slide position" />
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="ctrl-btn" id="nextBtn" aria-label="Next slide">›</button>
+  <div class="hint">← → keys</div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  const slider = document.getElementById('slider');
+  const curN = document.getElementById('curN');
+  const totN = document.getElementById('totN');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotsWrap = document.getElementById('dots');
+
+  slider.max = total;
+  totN.textContent = total;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.title = 'Slide ' + (i + 1);
+    d.addEventListener('click', () => go(i + 1));
+    dotsWrap.appendChild(d);
+  });
+  const dotEls = Array.from(dotsWrap.children);
+
+  let current = 1;
+
+  function go(n) {
+    n = Math.max(1, Math.min(total, n));
+    current = n;
+    slides.forEach((s, i) => s.classList.toggle('active', i === n - 1));
+    dotEls.forEach((d, i) => d.classList.toggle('active', i === n - 1));
+    slider.value = n;
+    curN.textContent = n;
+    prevBtn.disabled = n === 1;
+    nextBtn.disabled = n === total;
+    // Reflect slide in URL hash so deep-links work
+    if (location.hash !== '#' + n) {
+      history.replaceState(null, '', '#' + n);
+    }
+  }
+
+  prevBtn.addEventListener('click', () => go(current - 1));
+  nextBtn.addEventListener('click', () => go(current + 1));
+  slider.addEventListener('input', e => go(parseInt(e.target.value, 10)));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(1); }
+    else if (e.key === 'End') { e.preventDefault(); go(total); }
+  });
+
+  // Open at hash if present
+  const fromHash = parseInt((location.hash || '').replace('#', ''), 10);
+  if (fromHash >= 1 && fromHash <= total) go(fromHash); else go(1);
+
+  // Click on right/left edge of stage to advance/go back
+  document.querySelector('.stage').addEventListener('click', e => {
+    if (e.target.closest('a, button, input, .dot, .slide-body, .controls')) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (e.clientX > rect.left + rect.width * 0.5) go(current + 1);
+    else go(current - 1);
+  });
+</script>
+
+</body>
+</html>
